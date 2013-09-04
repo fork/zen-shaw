@@ -1,6 +1,0 @@
-[submodule "emmet"]
-	path = emmet
-	url = https://github.com/emmetio/emmet.git
-[submodule "zen-shaw/lib"]
-	path = zen-shaw/lib
-	url = https://github.com/emmetio/emmet.git
