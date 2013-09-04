@@ -16,7 +16,7 @@ console.log(parsed);
 // 	// this has to be done recursively, just a proof of concept
 // 	if(nodes.children.length>0) logElems(nodes.children[0]);
 // }
-// Test
+
 function Zen(expression) {
 	var element = document.createElement('div');
 	element.classList.add('a-class');
@@ -30,7 +30,7 @@ function run() {
 	output = document.getElementById("output"),
 	output.innerHTML="--- Go! ---<br>"
 	var emmetExpression = document.getElementById("emmet-string").value;
-	tree = parser.parse(emmetExpression);
+	tree = parser.parse(emmetExpression);s
 	console.log(DOMBuilder.traverseTree(tree));
 }
 
