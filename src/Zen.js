@@ -17,30 +17,46 @@ console.log(parsed);
 // 	if(nodes.children.length>0) logElems(nodes.children[0]);
 // }
 
-function Zen() {
+function Zen(expression) {
 	var element = document.createElement('div');
 	element.classList.add('a-class');
+	if (!(expression === 'div' || expression === 'div.a-class')) {
+		element.appendChild(document.createElement('b'));
+	}
 	return element;
 }
 
 function run() {
 	output = document.getElementById("output"),
-	output.innerHTML="--- Go! ---<br/>"
-	var input = document.getElementById("emmet-string");
-	emmetString = input.value;
-	parsed = parser.parse(emmetString);
-	DOMBuilder.traverseTree(parsed)
+	output.innerHTML="--- Go! ---<br>"
+	var emmetExpression = document.getElementById("emmet-string").value;
+	tree = parser.parse(emmetExpression);
+	console.log(DOMBuilder.traverseTree(tree));
 }
 
 var DOMBuilder = {}
 
-DOMBuilder.traverseTree = function(base) {
-	for (var node=0; node < base.children.length; node++) {
-			DOMBuilder.output(base.children[node]._name);
-			DOMBuilder.traverseTree(base.children[node]);
+function buildNode(properties) {
+	var node = document.createElement(properties._name);
+
+	// be verbose
+	DOMBuilder.output(properties._name);
+	// be recursive
+	DOMBuilder.traverseTree(properties);
+
+	return node;
+}
+
+DOMBuilder.traverseTree = function(base, context) {
+	if (!context) context = document.createDocumentFragtment();
+
+	for (var index = 0, length = base.children.length; index < length; index++) {
+		context.appendChild(buildNode(base.children[index]));
 	}
+
+	return context;
 }
 
 DOMBuilder.output = function(node) {
-	output.innerHTML+=node +"<br/>";
+	output.innerHTML+=node +"<br>";
 }
