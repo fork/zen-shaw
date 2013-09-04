@@ -1,9 +1,9 @@
 // // create a new parser
-// var parser = emmet.require('abbreviationParser');
-// var emmetString = "ul>li*3>a";
-// var parsed = parser.parse(emmetString);
-// // the parser returns an object
-// console.log(parsed);
+var parser = emmet.require('abbreviationParser');
+var emmetString = "ul>li{List Item $}*3>a";
+var parsed = parser.parse(emmetString);
+// the parser returns an object
+console.log(parsed);
 // 
 // logElems(parsed);
 // 
