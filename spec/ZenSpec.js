@@ -57,9 +57,11 @@ describe("Zen", function() {
 
 	
 	it("should support attributes", function(){
-		var actual = Zen('img[src="some-src"]');
-		expect(actual.src).toBe("some-src");
-		expect(actual.tagName).toBe('img');
+	  var srcPath = "some-src";
+		var actual = Zen('img[src=some-src]');
+		var firstCharecter = (actual.src).search(srcPath);
+		expect((actual.src).substring(firstCharecter,actual.src.length)).toBe("some-src");
+		expect(actual.tagName.toLowerCase()).toBe('img');
 	})
 
 	
