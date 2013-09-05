@@ -29,10 +29,10 @@ describe("Zen", function() {
 	});
 	
 	it("should support children", function(){
-		var actual = Zen('nav > ul').firstChild;
+		var actual = Zen('div');
+		container = document.createElement('div');
+		container.appendChild(actual);
 		expect(actual.firstChild).toBeTruthy();
-		expect(actual.firstChild).toBe(document.ELEMENT_NODE);
-		expect(actual.tagName).toBe('nav > ul');
 	});
 	
 	it("should support classes", function(){
@@ -41,7 +41,7 @@ describe("Zen", function() {
 		expect(jasmine.any(actual)).toEqual('controls');
 	});
 	
-	it("should support multiples", function(){
+	/*it("should support multiples", function(){
 		var actual = Zen('td.time,td.event-name');
 		expect(actual).toBe...
 	});
