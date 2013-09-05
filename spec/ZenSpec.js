@@ -28,11 +28,42 @@ describe("Zen", function() {
 		expect(actual.toLowerCase()).toBe('span');
 	});
 	
+	it("should support children", function(){
+		var actual = Zen('nav > ul').firstChild;
+		expect(actual.firstChild).toBeTruthy();
+		expect(actual.firstChild).toBe(document.ELEMENT_NODE);
+		expect(actual.tagName).toBe('nav > ul');
+	});
+	
+	it("should support classes", function(){
+		var actual = Zen('.controls > ul');
+		expect(actual).toBe(true);
+		expect(jasmine.any(actual)).toEqual('controls');
+	});
+	
+	it("should support multiples", function(){
+		var actual = Zen('td.time,td.event-name');
+		expect(actual).toBe...
+	});
+	
+	it("should support ids", function(){
+		var actual = Zen('#footer');
+		expect(actual.id).toBe("footer");
+	});
+	
+	it("should support attributes", function(){
+		var actual = Zen('img[src="some-src"]');
+		expect(actual.src).toBe("some-src");
+		expect(actual.tagName).toBe('img');
+	})
+
+	
 	/*it("should return a Document Fragment", function() {
 		var actual = Zen('span, span');
 		expect(actual.nodeType).toBe(document.DOCUMENT_FRAGMENT_NODE);
 		expect(actual.firstChild).toBeTruthy();
 	});*/
+		
 	// in the future fara far away
 	// it("should be able to handle the example of the zen-coding frontpage", function () {
 	// 	var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
