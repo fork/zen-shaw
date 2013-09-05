@@ -34,6 +34,8 @@ function Zen(expression) {
       }
       if(children[i].id !== "")
         element.setAttribute("id", children[i].id);
+      if(children[i].src !== "")
+        element.setAttribute("src", children[i].src);
     }
   }
   if (!element.firstChild) {
@@ -46,10 +48,15 @@ function buildNode(properties) {
 	var node = document.createElement(properties._name);
 	var node_class = properties.attribute('class');
 	var node_id = properties.attribute('id');
+	var node_src = properties.attribute('src');
 	if(node_class)
 	  node.classList.add(node_class);
 	if(node_id)
 	  node.id = node_id;
+  if(node_src) {
+    node.src = node_src;
+    console.log(node.src);
+  }
 	// be verbose
 	//DOMBuilder.output(properties._name);
 	// be recursive
