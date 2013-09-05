@@ -12,10 +12,12 @@ describe("Zen", function() {
 		}).not.toThrow();
 		expect(actual.nodeType).toBe(document.ELEMENT_NODE);
 	});
+	
 	it("should be able to create elements with classes", function() {
 		var actual = Zen('div.a-class').classList.contains('a-class');
 		expect(actual).toBe(true);
 	});
+	
 	it("should be able to nest elements", function() {
 		var actual = Zen('span>b').children[0];
     expect(function () {
@@ -23,9 +25,15 @@ describe("Zen", function() {
 			container.appendChild(actual);
 		}).not.toThrow();
 	});
+	
 	it("should support tagnames other than div", function() {
 		var actual = Zen('span').tagName;
 		expect(actual.toLowerCase()).toBe('span');
+	});
+	
+	it("should support ids", function(){
+		var actual = Zen('div#footer');
+		expect(actual.id).toBe("footer");
 	});
 	
 	it("should support children", function(){
@@ -41,15 +49,12 @@ describe("Zen", function() {
 		expect(jasmine.any(actual)).toEqual('controls');
 	});
 	
-	it("should support multiples", function(){
+	/*it("should support multiples", function(){
 		var actual = Zen('td.time,td.event-name');
 		expect(actual).toBe...
-	});
+	});*/
 	
-	it("should support ids", function(){
-		var actual = Zen('#footer');
-		expect(actual.id).toBe("footer");
-	});
+
 	
 	it("should support attributes", function(){
 		var actual = Zen('img[src="some-src"]');

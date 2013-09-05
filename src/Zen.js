@@ -21,17 +21,19 @@ output = document.getElementById("output");
 var DOMBuilder = {}
 function Zen(expression) {
   var parsed = parser.parse(expression);
-  var result = DOMBuilder.traverseTree(parsed);   
+  var result = DOMBuilder.traverseTree(parsed); 
   if (result.hasChildNodes()){
     var i=0;
     var element;
     var children = result.childNodes;
     for (var i = 0; i < children.length; i++) {
-      var element = document.createElement(children[i].tagName);      
+      var element = document.createElement(children[i].tagName).cloneNode(true);
       if (children[i].className !== "") {
         elementClass = children[i].className;
         element.classList.add(elementClass);
       }
+      if(children[i].id !== "")
+        element.setAttribute("id", children[i].id);
     }
   }
   if (!element.firstChild) {
@@ -43,12 +45,15 @@ function Zen(expression) {
 function buildNode(properties) {
 	var node = document.createElement(properties._name);
 	var node_class = properties.attribute('class');
+	var node_id = properties.attribute('id');
 	if(node_class)
 	  node.classList.add(node_class);
+	if(node_id)
+	  node.id = node_id;
 	// be verbose
 	//DOMBuilder.output(properties._name);
 	// be recursive
-	DOMBuilder.traverseTree(properties);
+	DOMBuilder.traverseTree(properties);  
 	return node;
 }
 
