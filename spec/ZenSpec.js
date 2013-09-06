@@ -37,10 +37,8 @@ describe("Zen", function() {
 	});
 	
 	it("should support children", function(){
-		var actual = Zen('nav > ul').firstChild;
-		expect(actual.firstChild).toBeTruthy();
+		var actual = Zen('nav>ul').firstChild;
 		expect(actual.firstChild).toBe(document.ELEMENT_NODE);
-		expect(actual.tagName).toBe('nav > ul');
 	});
 	
 	/*it("should support classes", function(){
