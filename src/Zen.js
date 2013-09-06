@@ -1,8 +1,6 @@
 // // create a new parser
 var parser = emmet.require('abbreviationParser'),
-emmetString,
-parsed,
-output = document.getElementById("output");
+    emmetString, output = document.getElementById("output");
 
 
 // the parser returns an object
@@ -18,59 +16,41 @@ output = document.getElementById("output");
 // 	if(nodes.children.length>0) logElems(nodes.children[0]);
 // }
 // Test
-var DOMBuilder = {}
+
+'img[alt="This, maybe not..."]'
+
+var DOMBuilder = {};
+
 function Zen(expression) {
-  var parsed = parser.parse(expression);
-  var result = DOMBuilder.traverseTree(parsed); 
-  if (result.hasChildNodes()){
-    var i=0;
-    var element;
-    var children = result.childNodes;
-    for (var i = 0; i < children.length; i++) {
-      var element = document.createElement(children[i].tagName).cloneNode(true);
-      if (children[i].className !== "") {
-        elementClass = children[i].className;
-        element.classList.add(elementClass);
-      }
-      if(children[i].id !== "")
-        element.setAttribute("id", children[i].id);
-      if(children[i].src !== "")
-        element.setAttribute("src", children[i].src);
-    }
-  }
-  if (!element.firstChild) {
-      element.appendChild(document.createElement('b'));
-  }
-	return element;
+	var fragment = document.createDocumentFragment();
+	var nodes = parser.parse(expression).children;
+
+	for (var index = 0, length = nodes.length; index < length; index++) {
+		traverseTree(nodes[index], fragment)
+	}
+
+	return fragment;
 }
 
 function buildNode(properties) {
 	var node = document.createElement(properties._name);
-	var node_class = properties.attribute('class');
-	var node_id = properties.attribute('id');
-	var node_src = properties.attribute('src');
-	if(node_class)
-	  node.classList.add(node_class);
-	if(node_id)
-	  node.id = node_id;
-  if(node_src) {
-    node.src = node_src;
-    console.log(node.src);
-  }
-	// be verbose
-	//DOMBuilder.output(properties._name);
+
+	var attributes = properties._attributes, attr;
+	for (var i = 0, len = attributes.length; i < len; i++) {
+		attr = attributes[i];
+		node.setAttribute(attr.name, attr.value);
+	}
+
 	// be recursive
-	DOMBuilder.traverseTree(properties);  
 	return node;
 }
 
-DOMBuilder.traverseTree = function(base, context) {
-  var counter = 0;
-	if (!context) context = document.createDocumentFragment();
+function traverseTree(base, context) {
+	var node = buildNode(base);
+	context.appendChild(node);
 	for (var index = 0, length = base.children.length; index < length; index++) {
-		  context.appendChild(buildNode(base.children[index]));
+		traverseTree(base.children[index], node)
 	}
-	return context;
 }
 
 DOMBuilder.output = function(node) {

@@ -1,80 +1,78 @@
 describe("Zen", function() {
 
-	beforeEach(function() {
+	function traverse(node, callback) {
+		callback.call(node, node);
+
+		var children = node.childNodes;
+		for(var i = 0, len = children.length; i < len; i++) {
+			traverse(children[i], callback);
+		}
+	}
+
+	it("should return a Document Fragment", function() {
+		var siblings = Zen('span+span');
+		expect(siblings).toBeCalled('DocumentFragment');
 	});
 
-	it("should be able to create elements", function() {		
-		var actual = Zen('div').firstChild;	
-		expect(function () {
-			container = document.createElement('div');
-			container.appendChild(actual);
-  	  
-		}).not.toThrow();
-		expect(actual.nodeType).toBe(document.ELEMENT_NODE);
+	it("should be able to create TAGs", function() {
+		var root = Zen('div>div').firstChild;
+		var div = document.createElement('div');
+		traverse(root, function(node) {
+			expect(function () { div.appendChild(node); }).not.toThrow();
+			expect(node.nodeType).toBe(node.ELEMENT_NODE);
+		});
 	});
-	
+
+	it("should be able to name the tags being built", function() {
+		var actual = Zen('div').firstChild;
+		expect(actual.tagName).toBe('DIV');
+	});
+
 	it("should be able to create elements with classes", function() {
-		var actual = Zen('div.a-class').classList.contains('a-class');
-		expect(actual).toBe(true);
+		var actual = Zen('div.a-class').firstChild;
+		expect(actual).toHaveClass('a-class');
 	});
-	
+
 	it("should be able to nest elements", function() {
-		var actual = Zen('span>b').children[0];
-    expect(function () {
-			container = document.createElement('div');
-			container.appendChild(actual);
-		}).not.toThrow();
+		// FIXME var actual = Zen('span > b').children[0];
+		var span = Zen('span>b').firstChild;
+		expect(span.tagName).toBe('SPAN');
+		expect(span.firstChild.tagName).toBe('B');
 	});
-	
-	it("should support tagnames other than div", function() {
-		var actual = Zen('span').tagName;
-		expect(actual.toLowerCase()).toBe('span');
-	});
-	
+
 	it("should support ids", function(){
-		var actual = Zen('div#footer');
+		var actual = Zen('div#footer').firstChild;
 		expect(actual.id).toBe("footer");
 	});
-	
-	it("should support children", function(){
-		var actual = Zen('nav>ul').firstChild;
-		expect(actual.firstChild).toBe(document.ELEMENT_NODE);
-	});
-	
-	/*it("should support classes", function(){
-		var actual = Zen('.controls > ul');
-		expect(actual).toBe(true);
-		expect(jasmine.any(actual)).toEqual('controls');
-	});
-	
-	it("should support multiples", function(){
-		var actual = Zen('td.time,td.event-name');
-		expect(actual).toBe...
-	});*/
-	
 
-	
+	it("should support siblings", function(){
+		var fragment = Zen('td.time+td.event-name');
+		expect(fragment).toBeCalled('DocumentFragment');
+
+		var nodes = fragment.childNodes;
+		expect(nodes.length).toBe(2);
+
+		var timeNode = nodes[0];
+		expect(timeNode.tagName).toBe('TD');
+		expect(timeNode).toHaveClass('time');
+
+		var eventNameNode = nodes[1];
+		expect(eventNameNode.tagName).toBe('TD');
+		expect(eventNameNode).toHaveClass('event-name');
+	});
+
 	it("should support attributes", function(){
-	  var srcPath = "some-src";
-		var actual = Zen('img[src=some-src]');
-		var firstCharecter = (actual.src).search(srcPath);
-		expect((actual.src).substring(firstCharecter,actual.src.length)).toBe("some-src");
-		expect(actual.tagName.toLowerCase()).toBe('img');
+		var img = Zen('img[alt="Hello World!"]').firstChild;
+		expect(img.alt).toBe('Hello World!');
 	})
 
-	
-	/*it("should return a Document Fragment", function() {
-		var actual = Zen('span, span');
-		expect(actual.nodeType).toBe(document.DOCUMENT_FRAGMENT_NODE);
-		expect(actual.firstChild).toBeTruthy();
-	});*/
-		
+
 	// in the future fara far away
 	// it("should be able to handle the example of the zen-coding frontpage", function () {
 	// 	var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
 	// 	var renderer = document.createElement('div');
 	// 	var expected = '<div id="page"><div class="logo"></div><ul id="navigation"><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li></ul></div>';
-    // 
+    //
 	// 	renderer.appendChild(fragment);
 	// 	expect(renderer.innerHTML).toBe(expected);
 	// });
