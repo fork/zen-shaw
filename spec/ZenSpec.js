@@ -65,12 +65,6 @@ describe("Zen", function() {
 		var img = Zen('img[alt="Hello World!"]').firstChild;
 		expect(img.alt).toBe('Hello World!');
 	});
-	
-	it("should support ids and classes together", function(){
-		var actual = Zen('div#name.one.two').firstChild;
-		expect(actual.id).toBe("name");
-		expect(actual).toHaveClass("one");
-	});
 
 	it("should support advanced selectors like build a table", function(){
 		var root = Zen('table>tr>td').firstChild;
@@ -80,6 +74,28 @@ describe("Zen", function() {
 			expect(node.nodeType).toBe(node.ELEMENT_NODE);
 		});
 	});
+	
+	it("should support the div#name.one.two-Selector", function(){
+		var fragment = Zen('div#name.one.two').firstChild;
+		
+		var nodes = fragment.childNodes;
+		expect(fragment.id).toBe("name");
+		expect(fragment).toHaveClass("two");
+	});
+	
+	it("should support colspan for tables", function(){
+		var attr = Zen('td[colspan=2]').firstChild;
+		//expect(fragment.tagName).toBe('TD');
+		console.log(attr.colspan);
+		expect(attr.colspan).toBe(2);
+	});
+	
+	it("should support paragraphs with title", function(){
+		var fragment = Zen('p[title="a-title"]').firstChild;
+		expect(fragment.tagName).toBe('P');
+		expect(fragment.title).toBe("a-title");
+	});
+	
 	// in the future fara far away
 	// it("should be able to handle the example of the zen-coding frontpage", function () {
 	// 	var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
