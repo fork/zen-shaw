@@ -2,22 +2,7 @@
 var parser = emmet.require('abbreviationParser'),
     emmetString, output = document.getElementById("output");
 
-
-// the parser returns an object
-// 
-// logElems(parsed);
-// 
-// function logElems(nodes) { 
-// 	$.each(nodes.children, function(index, element) {
-// 		// get the tag name
-// 		console.log(element.name());
-// 	})
-// 	// this has to be done recursively, just a proof of concept
-// 	if(nodes.children.length>0) logElems(nodes.children[0]);
-// }
-// Test
-
-'img[alt="This, maybe not..."]'
+//'img[alt="This, maybe not..."]'
 
 var DOMBuilder = {};
 
@@ -53,15 +38,3 @@ function traverseTree(base, context) {
 	}
 }
 
-DOMBuilder.output = function(node) {
-  //console.log(node);
-	//output.innerHTML+=node +"<br>";
-}
-
-function run() {
-	output = document.getElementById("output"),
-	output.innerHTML="--- Go! ---<br>"
-	var emmetExpression = document.getElementById("emmet-string").value;
-	tree = parser.parse(emmetExpression);
-	console.log(DOMBuilder.traverseTree(tree));
-}
