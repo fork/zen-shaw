@@ -64,9 +64,22 @@ describe("Zen", function() {
 	it("should support attributes", function(){
 		var img = Zen('img[alt="Hello World!"]').firstChild;
 		expect(img.alt).toBe('Hello World!');
-	})
+	});
+	
+	it("should support ids and classes together", function(){
+		var actual = Zen('div#name.one.two').firstChild;
+		expect(actual.id).toBe("name");
+		expect(actual).toHaveClass("one");
+	});
 
-
+	it("should support advanced selectors like build a table", function(){
+		var root = Zen('table>tr>td').firstChild;
+		var table = document.createElement('table');
+		traverse(root, function(node) {
+			expect(function () { table.appendChild(node); }).not.toThrow();
+			expect(node.nodeType).toBe(node.ELEMENT_NODE);
+		});
+	});
 	// in the future fara far away
 	// it("should be able to handle the example of the zen-coding frontpage", function () {
 	// 	var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
@@ -78,3 +91,5 @@ describe("Zen", function() {
 	// });
 
 });
+
+  
