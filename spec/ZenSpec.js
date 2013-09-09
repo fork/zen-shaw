@@ -66,7 +66,28 @@ describe("Zen", function() {
 		expect(img.alt).toBe('Hello World!');
 	})
 
-
+	it("should support the div#name.one.two-Selector", function(){
+		var fragment = Zen('div#name.one.two').firstChild;
+		
+		var nodes = fragment.childNodes;
+		expect(fragment.id).toBe("name");
+		expect(fragment).toHaveClass("two");
+	});
+	
+	it("should support colspan for tables", function(){
+		var attr = Zen('td[colspan=2]').firstChild;
+		//expect(fragment.tagName).toBe('TD');
+		console.log(attr.colspan);
+		expect(attr.colspan).toBe(2);
+	});
+	
+	it("should support paragraphs with title", function(){
+		var fragment = Zen('p[title="a-title"]').firstChild;
+		expect(fragment.tagName).toBe('P');
+		expect(fragment.title).toBe("a-title");
+	});
+	
+	
 	// in the future fara far away
 	// it("should be able to handle the example of the zen-coding frontpage", function () {
 	// 	var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
