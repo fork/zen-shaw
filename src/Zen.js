@@ -34,8 +34,7 @@ var Zen = (function() {
   		traverseTree(base.children[index], node)
   	}
   }
-  return {
-    zen: function(expression){
+  return function(expression){
       var fragment = document.createDocumentFragment();
     	var nodes = parser.parse(expression).children;
 
