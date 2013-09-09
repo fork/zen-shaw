@@ -2,20 +2,6 @@
 var parser = emmet.require('abbreviationParser'),
     emmetString, output = document.getElementById("output");
 
-
-// the parser returns an object
-// 
-// logElems(parsed);
-// 
-// function logElems(nodes) { 
-// 	$.each(nodes.children, function(index, element) {
-// 		// get the tag name
-// 		console.log(element.name());
-// 	})
-// 	// this has to be done recursively, just a proof of concept
-// 	if(nodes.children.length>0) logElems(nodes.children[0]);
-// }
-// Test
 var Zen = (function() {
   var buildNode = function(properties) {
     var node = document.createElement(properties._name);
