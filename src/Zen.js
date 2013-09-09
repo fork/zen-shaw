@@ -20,17 +20,15 @@ var Zen = (function() {
   		traverseTree(base.children[index], node)
   	}
   }
-  return {
-    zen:function(expression){
-      var fragment = document.createDocumentFragment();
-    	var nodes = parser.parse(expression).children;
+  return function(expression){
+    var fragment = document.createDocumentFragment();
+  	var nodes = parser.parse(expression).children;
 
-    	for (var index = 0, length = nodes.length; index < length; index++) {
-    		traverseTree(nodes[index], fragment)
-    	}
+  	for (var index = 0, length = nodes.length; index < length; index++) {
+  		traverseTree(nodes[index], fragment)
+  	}
 
-    	return fragment;
-    }
+  	return fragment;
   };
 }());
 
