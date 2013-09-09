@@ -1,4 +1,4 @@
-describe("DOMBuilder", function() {
+describe("Zen", function() {
 
 	function traverse(node, callback) {
 		callback.call(node, node);
@@ -10,12 +10,12 @@ describe("DOMBuilder", function() {
 	}
 
 	it("should return a Document Fragment", function() {
-		var siblings = Zen('span+span');
+		var siblings = Zen.zen('span+span');
 		expect(siblings).toBeCalled('DocumentFragment');
 	});
 
 	it("should be able to create TAGs", function() {
-		var root = Zen('div>div').firstChild;
+		var root = Zen.zen('div>div').firstChild;
 		var div = document.createElement('div');
 		traverse(root, function(node) {
 			expect(function () { div.appendChild(node); }).not.toThrow();
@@ -24,29 +24,29 @@ describe("DOMBuilder", function() {
 	});
 
 	it("should be able to name the tags being built", function() {
-		var actual = Zen('div').firstChild;
+		var actual = Zen.zen('div').firstChild;
 		expect(actual.tagName).toBe('DIV');
 	});
 
 	it("should be able to create elements with classes", function() {
-		var actual = Zen('div.a-class').firstChild;
+		var actual = Zen.zen('div.a-class').firstChild;
 		expect(actual).toHaveClass('a-class');
 	});
 
 	it("should be able to nest elements", function() {
 		// FIXME var actual = Zen('span > b').children[0];
-		var span = Zen('span>b').firstChild;
+		var span = Zen.zen('span>b').firstChild;
 		expect(span.tagName).toBe('SPAN');
 		expect(span.firstChild.tagName).toBe('B');
 	});
 
 	it("should support ids", function(){
-		var actual = Zen('div#footer').firstChild;
+		var actual = Zen.zen('div#footer').firstChild;
 		expect(actual.id).toBe("footer");
 	});
 
 	it("should support siblings", function(){
-		var fragment = Zen('td.time+td.event-name');
+		var fragment = Zen.zen('td.time+td.event-name');
 		expect(fragment).toBeCalled('DocumentFragment');
 
 		var nodes = fragment.childNodes;
@@ -62,7 +62,7 @@ describe("DOMBuilder", function() {
 	});
 
 	it("should support attributes", function(){
-		var img = Zen('img[alt="Hello World!"]').firstChild;
+		var img = Zen.zen('img[alt="Hello World!"]').firstChild;
 		expect(img.alt).toBe('Hello World!');
 	})
 
