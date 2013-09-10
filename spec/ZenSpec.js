@@ -34,7 +34,8 @@ describe("Zen", function() {
 	});
 
 	it("should be able to nest elements", function() {
-		// FIXME var actual = Zen('span > b').children[0];
+		// TODO support spaces in expressions
+		// => var actual = Zen('span > b').children[0];
 		var span = Zen('span>b').firstChild;
 		expect(span.tagName).toBe('SPAN');
 		expect(span.firstChild.tagName).toBe('B');
@@ -74,21 +75,21 @@ describe("Zen", function() {
 			expect(node.nodeType).toBe(node.ELEMENT_NODE);
 		});
 	});
-	
+
 	it("should support the div#name.one.two-Selector", function(){
 		var fragment = Zen('div#name.one.two').firstChild;
 		//RADAR do we need the nodes-Variable?
-		var nodes = fragment.childNodes; 
+		var nodes = fragment.childNodes;
 		expect(fragment.id).toBe("name");
 		expect(fragment).toHaveClass("two");
 	});
-	
+
 	it("should support colspan for tables", function(){
 		var fragment = Zen('td[colspan=2]').firstChild;
 		expect(fragment.tagName).toBe('TD');
 		expect(fragment).toHaveAttribute("colspan", 2);
 	});
-	
+
 	it("should support paragraphs with title", function(){
 		var fragment = Zen('p[title="a-title"]').firstChild;
 		expect(fragment.tagName).toBe('P');
@@ -102,7 +103,7 @@ describe("Zen", function() {
 		expect(fragment.title).toBe("Hello");
 		expect(fragment).toHaveAttribute("rel", "some-rel");
 	});
-	
+
 	it("should support nested elements with classes", function(){
 		var fragment = Zen('ul#name>li.item').firstChild;
 		expect(fragment.tagName).toBe('UL');
@@ -110,15 +111,19 @@ describe("Zen", function() {
 		expect(fragment.firstChild.tagName).toBe("LI");
 		expect(fragment.firstChild).toHaveClass("item");
 	});
-	
+
 	it("should support the Plus-Operator", function(){
-		var fragment = Zen('p+p');
+		var tagNames = 'P DIV SPAN'.split(' ');
+		var fragment = Zen('p+div+span');
 		var nodes = fragment.childNodes;
-		expect(nodes.length).toBe(2);
-		expect(nodes[0].tagName).toBe('P');
-		expect(nodes[1].tagName).toBe('P');
+
+		expect(nodes.length).toBe(tagNames.length);
+
+		for (var i = 0, len = tagNames.length; i < len; i++) {
+			expect(nodes[i].tagName).toBe(tagNames[i]);
+		}
 	});
-	
+
 	it("should support multiple children", function(){
 		var fragment = Zen('p*3');
 		var nodes = fragment.childNodes;
@@ -127,76 +132,53 @@ describe("Zen", function() {
 		expect(nodes[1].tagName).toBe('P');
 		expect(nodes[2].tagName).toBe('P');
 	});
-	
+
 	it("should support lists with multiple elements", function(){
-		var fragment = Zen('ul#name>li.item*3').firstChild;
-		var nodes = fragment.childNodes;
-		expect(fragment.tagName).toBe('UL');
-		expect(fragment.id).toBe("name");
-		expect(nodes.length).toBe(3);
-		expect(nodes[0].tagName).toBe('LI');
-		expect(nodes[0]).toHaveClass("item");
+		var list = Zen('ul#name>li.item*3').firstChild;
+		var items = list.childNodes;
+
+		expect(list.tagName).toBe('UL');
+		expect(list.id).toBe('name');
+
+		expect(items.length).toBe(3);
+		for(var i = 0; i < 3; i++) {
+			expect(items[i].tagName).toBe('LI');
+			expect(items[i]).toHaveClass('item');
+		}
 	});
-	
-	it("should support multiple children with classes", function(){
+
+	it("should support multiple children with incremented counter in item class", function(){
 		var fragment = Zen('p.name-$*3');
 		var nodes = fragment.childNodes;
-		expect(nodes.length).toBe(3);
-		for(var i = 0, len = nodes.length; i < len; i++) {
-			expect(nodes[i].tagName).toBe('P');
-			//expect(nodes[i]).toHaveClass("name-i");		
-		}
-	
-	});
-	
-	it("should support selections with options", function(){
-		var fragment = Zen('select>option#item-$*3').firstChild;
-		var nodes = fragment.childNodes;
-		expect(fragment.tagName).toBe('SELECT');
-		expect(nodes.length).toBe(3);
-		for(var i = 0, len = nodes.length; i < len; i++) {
-			expect(nodes[i].tagName).toBe('OPTION');
-			expect(nodes[i].id).toBe("item-$");
 
+		expect(nodes.length).toBe(3);
+
+		for(var i = 0; i < 3; i++) {
+			expect(nodes[i].tagName).toBe('P');
+			expect(nodes[i]).toHaveClass('name-' + i);
 		}
 	});
-	
-	/*it("should support unordered lists", function(){
-		var fragment = Zen('ul+').firstChild;
-		expect(fragment.tagName).toBe('UL');
-		expect(fragment.firstChild.tagName).toBe('LI');
+
+	it("should support options with different values", function(){
+		var select = Zen('select>option[value=item-$]*3').firstChild;
+		var options = select.childNodes;
+
+		expect(select.tagName).toBe('SELECT');
+		expect(options.length).toBe(3);
+
+		for(var i = 0; i < 3; i++) {
+			expect(options[i].tagName).toBe('OPTION');
+			expect(options[i].value).toBe('item-' + i);
+		}
 	});
-	
-	it("should support tables", function(){
-		var fragment = Zen('table+').firstChild;
-		var tableRow = fragment.firstChild;
-		var tableData = tableRow.firstChild;
-		expect(fragment.tagName).toBe('TABLE');
-		expect(tableRow.tagName).toBe('TR');
-		expect(tableData.tagName).toBe('T');
+
+	it("should be able to handle the example of the zen-coding frontpage", function () {
+		var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
+		var renderer = document.createElement('div');
+		var expected = '<div id="page"><div class="logo"></div><ul id="navigation"><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li></ul></div>';
+
+		renderer.appendChild(fragment);
+		expect(renderer.innerHTML).toBe(expected);
 	});
-	
-	it("should support description lists", function(){
-		var fragment = Zen('dl+').firstChild;
-		var nodes = fragment.childNodes;
-		expect(fragment.tagName).toBe('DL');
-		expect(nodes.length).toBe(2);
-		expect(nodes[0].tagName).toBe('DT');
-		expect(nodes[1].tagName).toBe('DD');
-	});*/
-	
-	
-		
-	// in the future fara far away
-	// it("should be able to handle the example of the zen-coding frontpage", function () {
-	// 	var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
-	// 	var renderer = document.createElement('div');
-	// 	var expected = '<div id="page"><div class="logo"></div><ul id="navigation"><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li></ul></div>';
-    //
-	// 	renderer.appendChild(fragment);
-	// 	expect(renderer.innerHTML).toBe(expected);
-	// });
 
 });
-
-  
