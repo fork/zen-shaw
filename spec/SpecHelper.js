@@ -7,6 +7,10 @@ beforeEach(function() {
 		},
 		toHaveClass: function(className) {
 			return this.actual.classList.contains(className);
+		},
+		toHaveAttribute: function(attrName, value){
+			return this.actual.getAttribute(attrName) == value;
 		}
 	});
+
 });

@@ -75,10 +75,9 @@ describe("Zen", function() {
 	});
 	
 	it("should support colspan for tables", function(){
-		var attr = Zen('td[colspan=2]').firstChild;
-		//expect(fragment.tagName).toBe('TD');
-		console.log(attr.colspan);
-		expect(attr.colspan).toBe(2);
+		var fragment = Zen('td[colspan=2]').firstChild;
+		expect(fragment.tagName).toBe('TD');
+		expect(fragment).toHaveAttribute("colspan", 2);
 	});
 	
 	it("should support paragraphs with title", function(){
@@ -86,6 +85,17 @@ describe("Zen", function() {
 		expect(fragment.tagName).toBe('P');
 		expect(fragment.title).toBe("a-title");
 	});
+	
+	it("should support title and rel for span", function(){
+		var fragment = Zen('span[title="Hello" rel="some-rel"]').firstChild;
+		expect(fragment.tagName).toBe('SPAN');
+		expect(fragment.title).toBe("Hello");
+		expect(fragment).toHaveAttribute("rel", "some-rel");
+	});
+	
+	
+	
+	
 	
 	
 	// in the future fara far away
