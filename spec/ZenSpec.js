@@ -144,7 +144,7 @@ describe("Zen", function() {
 		expect(nodes.length).toBe(3);
 		for(var i = 0, len = nodes.length; i < len; i++) {
 			expect(nodes[i].tagName).toBe('P');
-			//expect(nodes[i]).toHaveClass("name-i");		
+			expect(nodes[i]).toHaveClass("name-i");		
 		}
 	
 	});
@@ -156,7 +156,7 @@ describe("Zen", function() {
 		expect(nodes.length).toBe(3);
 		for(var i = 0, len = nodes.length; i < len; i++) {
 			expect(nodes[i].tagName).toBe('OPTION');
-			//expect(nodes[i].id).toBe("item");
+			expect(nodes[i].id).toBe("item");
 
 		}
 	});
@@ -173,10 +173,17 @@ describe("Zen", function() {
 		var tableData = tableRow.firstChild;
 		expect(fragment.tagName).toBe('TABLE');
 		expect(tableRow.tagName).toBe('TR');
-		expect(tableData.tagName).toBe('TD');
+		expect(tableData.tagName).toBe('T');
 	});
 	
-	
+	it("should support description lists", function(){
+		var fragment = Zen('dl+').firstChild;
+		var nodes = fragment.childNodes;
+		expect(fragment.tagName).toBe('DL');
+		expect(nodes.length).toBe(2);
+		expect(nodes[0].tagName).toBe('DT');
+		expect(nodes[1].tagName).toBe('DD');
+	});
 	
 	
 		

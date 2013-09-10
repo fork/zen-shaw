@@ -11,6 +11,7 @@ var Zen = (function() {
   		node.setAttribute(attr.name, attr.value);
   	}
   	// be recursive
+	console.log(node);
   	return node;
   }
   var traverseTree = function(base, context){
