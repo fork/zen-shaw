@@ -150,9 +150,9 @@ describe("Zen", function() {
 	it("should support multiple children with incremented counter in item class", function(){
 		var fragment = Zen('p.name-$*3');
 		var nodes = fragment.childNodes;
-
+		
 		expect(nodes.length).toBe(3);
-
+		
 		for(var i = 0; i < 3; i++) {
 			expect(nodes[i].tagName).toBe('P');
 			expect(nodes[i]).toHaveClass('name-' + (i+1));
@@ -175,7 +175,7 @@ describe("Zen", function() {
 	it("should be able to handle the example of the zen-coding frontpage", function () {
 		var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
 		var renderer = document.createElement('div');
-		var expected = '<div id="page"><div class="logo"></div><ul id="navigation"><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li><li><a href=""></a></li></ul></div>';
+		var expected = '<div id="page"><div class="logo"></div><ul id="navigation"><li><a></a></li><li><a></a></li><li><a></a></li><li><a></a></li><li><a></a></li></ul></div>';
 
 		renderer.appendChild(fragment);
 		expect(renderer.innerHTML).toBe(expected);

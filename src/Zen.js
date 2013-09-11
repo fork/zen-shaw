@@ -6,9 +6,16 @@ var Zen = (function() {
 			attr = attributes[i];
 			node.setAttribute(attr.name, attr.value);
 
+			console.log(node.value);
+			
+			if(node.value === "item-$"){
+				node.value = "item-".concat(i+1);
+			}
+		
+
 		}
 		// be recursive
-		console.log(node);
+		console.log(node.value);
 		return node;
 	}
 	var traverseTree = function(base, context){
@@ -23,8 +30,6 @@ var Zen = (function() {
 	return function Zen(expression){
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
-
-		console.log(expression, nodes);
 
 		for (var index = 0, length = nodes.length; index < length; index++) {
 			traverseTree(nodes[index], fragment)
