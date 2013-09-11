@@ -5,6 +5,7 @@ var Zen = (function() {
 		for (var i = 0, len = attributes.length; i < len; i++) {
 			attr = attributes[i];
 			node.setAttribute(attr.name, attr.value);
+
 		}
 		// be recursive
 		console.log(node);
