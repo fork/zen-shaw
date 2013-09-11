@@ -18,6 +18,7 @@ var Zen = (function() {
 		console.log(node.value);
 		return node;
 	}
+
 	var traverseTree = function(base, context){
 		var node = buildNode(base);
 		context.appendChild(node);
@@ -25,16 +26,20 @@ var Zen = (function() {
 			traverseTree(base.children[index], node)
 		}
 	}
-
+	
 	var parser = emmet.require('abbreviationParser');
+	
 	return function Zen(expression){
+			console.log(expression);
+			expression = expression.replace(/\s/g, '');
+			console.log(expression);
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
 
 		for (var index = 0, length = nodes.length; index < length; index++) {
 			traverseTree(nodes[index], fragment)
 		}
-
+	
 		return fragment;
 	};
 

@@ -33,10 +33,10 @@ describe("Zen", function() {
 		expect(actual).toHaveClass('a-class');
 	});
 
-	it("should be able to nest elements", function() {
+	it("should be able to nest elements and support spaces", function() {
 		// TODO support spaces in expressions
 		// => var actual = Zen('span > b').children[0];
-		var span = Zen('span>b').firstChild;
+		var span = Zen('span > b').firstChild;
 		expect(span.tagName).toBe('SPAN');
 		expect(span.firstChild.tagName).toBe('B');
 	});
@@ -180,5 +180,7 @@ describe("Zen", function() {
 		renderer.appendChild(fragment);
 		expect(renderer.innerHTML).toBe(expected);
 	});
+	
+	
 
 });
