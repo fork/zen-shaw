@@ -29,13 +29,11 @@ describe("Zen", function() {
 	});
 
 	it("should be able to create elements with classes", function() {
-		var actual = Zen('div.a-class').firstChild;
+		var actual = Zen('.a-class').firstChild;
 		expect(actual).toHaveClass('a-class');
 	});
 
 	it("should be able to nest elements and support spaces", function() {
-		// TODO support spaces in expressions
-		// => var actual = Zen('span > b').children[0];
 		var span = Zen('span > b').firstChild;
 		expect(span.tagName).toBe('SPAN');
 		expect(span.firstChild.tagName).toBe('B');
@@ -181,6 +179,31 @@ describe("Zen", function() {
 		expect(renderer.innerHTML).toBe(expected);
 	});
 	
-	
+	it('should support inner HTML text', function(){
+		var paragraph = Zen('div>p{Text}').firstChild;
+		expected = '<p>Text</p>';
+		//expect(paragraph.tagName).toBe('DIV');
+		expect(paragraph.innerHTML).toBe(expected);
+	})
+	it('expand tagnames by context', function () {
+		var time;
+
+		expect(function () {
+			time = Zen('tr > .time').firstChild.firstChild;
+			expect(time.tagName).toBe('TD');
+		}).not.toThrow();
+	});
+	it('should support objects as data source', function () {
+		expect(function () {
+			var foo = Zen('#foo > .item-$(i)*3', { 'i': ['foo', 'bar', 'baz'] }).firstChild;
+			var classNames = 'item-foo item-bar item-baz'.split(' ');
+			var items = foo.children;
+
+			expect(items.length).toBe(classNames.length);
+			for (var i = 0, len = items.length; i < len; i++) {
+				expect(items[i].class).toBe(classNames[i]);
+			}
+		}).not.toThrow();
+	});
 
 });

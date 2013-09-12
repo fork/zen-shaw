@@ -1,38 +1,47 @@
 var Zen = (function() {
-	var buildNode = function(properties) {
+	
+	function getTagNameByParent(tagName) {
+		switch (tagName) {
+		case 'ol':
+		case 'ul':
+			return 'li';
+		case 'table':
+			return 'tr';
+		case 'tr':
+			return 'td'
+		default:
+			return 'div';
+		}
+	}
+	
+	function buildNode(properties) {
+		properties._name = properties._name || getTagNameByParent(properties.parent._name);
 		var node = document.createElement(properties._name);
 		var attributes = properties._attributes, attr;
 		for (var i = 0, len = attributes.length; i < len; i++) {
 			attr = attributes[i];
-			node.setAttribute(attr.name, attr.value);
-
-			console.log(node.value);
-			
-			if(node.value === "item-$"){
-				node.value = "item-".concat(i+1);
+			if (attr.value && attr.value.indexOf('$') > -1){
+				attr.value = attr.value.replace("$", properties.counter);
 			}
-		
 
+			node.setAttribute(attr.name, attr.value);
 		}
 		// be recursive
-		console.log(node.value);
 		return node;
 	}
 
-	var traverseTree = function(base, context){
+	function traverseTree(base, context){
 		var node = buildNode(base);
 		context.appendChild(node);
 		for (var index = 0, length = base.children.length; index < length; index++) {
 			traverseTree(base.children[index], node)
+		
 		}
 	}
 	
 	var parser = emmet.require('abbreviationParser');
 	
 	return function Zen(expression){
-			console.log(expression);
-			expression = expression.replace(/\s/g, '');
-			console.log(expression);
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
 
