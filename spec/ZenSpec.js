@@ -198,10 +198,9 @@ describe("Zen", function() {
 			var foo = Zen('#foo > .item-$(i)*3', { 'i': ['foo', 'bar', 'baz'] }).firstChild;
 			var classNames = 'item-foo item-bar item-baz'.split(' ');
 			var items = foo.children;
-
 			expect(items.length).toBe(classNames.length);
 			for (var i = 0, len = items.length; i < len; i++) {
-				expect(items[i].class).toBe(classNames[i]);
+				expect(items[i]).toHaveClass(classNames[i]);
 			}
 		}).not.toThrow();
 	});
