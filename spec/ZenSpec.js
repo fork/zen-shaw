@@ -184,7 +184,8 @@ describe("Zen", function() {
 		expected = '<p>Text</p>';
 		//expect(paragraph.tagName).toBe('DIV');
 		expect(paragraph.innerHTML).toBe(expected);
-	})
+	});
+	
 	it('expand tagnames by context', function () {
 		var time;
 
@@ -193,6 +194,7 @@ describe("Zen", function() {
 			expect(time.tagName).toBe('TD');
 		}).not.toThrow();
 	});
+	
 	it('should support objects as data source', function () {
 		expect(function () {
 			var foo = Zen('#foo > .item-$(i)*3', { 'i': ['foo', 'bar', 'baz'] }).firstChild;
@@ -204,5 +206,4 @@ describe("Zen", function() {
 			}
 		}).not.toThrow();
 	});
-
 });
