@@ -49,12 +49,8 @@ var Zen = (function() {
 	}
 	
 	var parser = emmet.require('abbreviationParser');
-	
-<<<<<<< HEAD
-	return function Zen(expression, ){
-=======
+
 	return function Zen(expression, arrOfAttr){
->>>>>>> cd68edc2cc3cb5b62a51a31d7dbf58df06266deb
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
 
