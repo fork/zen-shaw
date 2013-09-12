@@ -8,7 +8,11 @@ var Zen = (function() {
 		case 'table':
 			return 'tr';
 		case 'tr':
-			return 'td'
+			return 'td';
+		case 'select':
+			return 'option';
+		case 'nav':
+			return 'ul';
 		default:
 			return 'div';
 		}
@@ -26,6 +30,7 @@ var Zen = (function() {
 
 			node.setAttribute(attr.name, attr.value);
 		}
+				console.log(node);
 		// be recursive
 		return node;
 	}
@@ -41,15 +46,16 @@ var Zen = (function() {
 	
 	var parser = emmet.require('abbreviationParser');
 	
-	return function Zen(expression){
+	return function Zen(expression, ){
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
 
 		for (var index = 0, length = nodes.length; index < length; index++) {
 			traverseTree(nodes[index], fragment)
 		}
-	
+
 		return fragment;
+
 	};
 
 }());
