@@ -186,7 +186,7 @@ describe("Zen", function() {
 		expect(paragraph.innerHTML).toBe(expected);
 	});
 	
-	it('expand tagnames by context', function () {
+	it('should expand tagnames by context', function () {
 		var time;
 
 		expect(function () {
@@ -195,6 +195,15 @@ describe("Zen", function() {
 		}).not.toThrow();
 	});
 	
+	it('should expand tagnames by context', function () {
+		var time;
+
+		expect(function () {
+			type = Zen('form > .type').firstChild.firstChild;
+			expect(type.tagName).toBe('INPUT');
+		}).not.toThrow();
+	});
+
 	it('should support objects as data source', function () {
 		expect(function () {
 			var foo = Zen('#foo > .item-$(i)*3', { 'i': ['foo', 'bar', 'baz'] }).firstChild;

@@ -1,7 +1,10 @@
 var Zen = (function() {
+
 	
-	function getTagNameByParent(tagName) {
-		switch (tagName) {
+
+
+	function getTagNameByContext(context) {
+		switch (context.parent._name) {
 		case 'ol':
 		case 'ul':
 			return 'li';
@@ -13,14 +16,27 @@ var Zen = (function() {
 			return 'option';
 		case 'nav':
 			return 'ul';
+		case 'form':
+			var type = context.abbreviation;
+			if (type === '.type') { 
+			return 'input';
+			}
+			else return 'div';
+		case 'head':
+			var name = context.abbreviation;
+			var content = context.abbreviation;
+			if (name === '.name' && content === '.content') { 
+			return 'meta';
+			}
+			else return 'div';
 		default:
 			return 'div';
 		}
 	}
-	
+
 	function buildNode(properties, arrOfAttr) {
-		properties._name = properties._name || getTagNameByParent(properties.parent._name);
-		properties._text = properties._text; 
+		properties._name = properties._name || getTagNameByContext(properties);
+		properties._text = properties._text;
 		var node = document.createElement(properties._name);
 		var attributes = properties._attributes, attr;
 		node.innerHTML =  properties._text;
@@ -33,7 +49,7 @@ var Zen = (function() {
   		    attr.value = attr.value.replace("$", properties.counter);
   		  }
 			}
-			node.setAttribute(attr.name, attr.value);			
+			node.setAttribute(attr.name, attr.value);
 		}
 		// be recursive
 		return node;
@@ -46,18 +62,16 @@ var Zen = (function() {
 			traverseTree(base.children[index], node, arrOfAttr);
 		}
 	}
-	
+
 	var parser = emmet.require('abbreviationParser');
 
 	return function Zen(expression, arrOfAttr){
-		
+
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
-
 		for (var index = 0, length = nodes.length; index < length; index++) {
 			traverseTree(nodes[index], fragment, arrOfAttr)
 		}
-
 		return fragment;
 
 	};
