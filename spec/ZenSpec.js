@@ -8,7 +8,7 @@ describe("Zen", function() {
 			traverse(children[i], callback);
 		}
 	}
-
+	
 	it("should return a Document Fragment", function() {
 		var siblings = Zen('span+span');
 		expect(siblings).toBeCalled('DocumentFragment');
@@ -199,7 +199,7 @@ describe("Zen", function() {
 		var time;
 
 		expect(function () {
-			type = Zen('form > .type').firstChild.firstChild;
+			type = Zen('form > .[type='sowas']').firstChild.firstChild;
 			expect(type.tagName).toBe('INPUT');
 		}).not.toThrow();
 	});

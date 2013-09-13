@@ -4,6 +4,7 @@ var Zen = (function() {
 
 
 	function getTagNameByContext(context) {
+		console.log(context.abbreviation);
 		switch (context.parent._name) {
 		case 'ol':
 		case 'ul':
@@ -51,6 +52,7 @@ var Zen = (function() {
 			}
 			node.setAttribute(attr.name, attr.value);
 		}
+		console.log(node);
 		// be recursive
 		return node;
 	}
