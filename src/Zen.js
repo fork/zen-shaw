@@ -1,10 +1,11 @@
 var Zen = (function() {
 
-	
+
 
 
 	function getTagNameByContext(context) {
-		console.log(context.abbreviation);
+		console.log(context._attributes[1].name)
+		console.log(context.class);
 		switch (context.parent._name) {
 		case 'ol':
 		case 'ul':
@@ -18,15 +19,15 @@ var Zen = (function() {
 		case 'nav':
 			return 'ul';
 		case 'form':
-			var type = context.abbreviation;
-			if (type === '.type') { 
+			var type = context._attributes[1].name;
+			if (type === 'type') { 
 			return 'input';
 			}
 			else return 'div';
 		case 'head':
-			var name = context.abbreviation;
-			var content = context.abbreviation;
-			if (name === '.name' && content === '.content') { 
+			var name = context._attributes[1].name;
+			var content = context._attributes[1].name;
+			if (name === 'name' && content === 'content') { 
 			return 'meta';
 			}
 			else return 'div';
@@ -52,7 +53,6 @@ var Zen = (function() {
 			}
 			node.setAttribute(attr.name, attr.value);
 		}
-		console.log(node);
 		// be recursive
 		return node;
 	}

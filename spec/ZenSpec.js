@@ -9,7 +9,7 @@ describe("Zen", function() {
 		}
 	}
 	
-	it("should return a Document Fragment", function() {
+	/*it("should return a Document Fragment", function() {
 		var siblings = Zen('span+span');
 		expect(siblings).toBeCalled('DocumentFragment');
 	});
@@ -193,18 +193,18 @@ describe("Zen", function() {
 			time = Zen('tr > .time').firstChild.firstChild;
 			expect(time.tagName).toBe('TD');
 		}).not.toThrow();
-	});
+	});*/
 	
 	it('should expand tagnames by context', function () {
 		var time;
 
 		expect(function () {
-			type = Zen('form > .[type='sowas']').firstChild.firstChild;
-			expect(type.tagName).toBe('INPUT');
+			input = Zen('form > .[type]').firstChild.firstChild;
+			expect(input.tagName).toBe('INPUT');
 		}).not.toThrow();
 	});
 
-	it('should support objects as data source', function () {
+	/*it('should support objects as data source', function () {
 		expect(function () {
 			var foo = Zen('#foo > .item-$(i)*3', { 'i': ['foo', 'bar', 'baz'] }).firstChild;
 			var classNames = 'item-foo item-bar item-baz'.split(' ');
@@ -214,5 +214,5 @@ describe("Zen", function() {
 				expect(items[i]).toHaveClass(classNames[i]);
 			}
 		}).not.toThrow();
-	});
+	});*/
 });
