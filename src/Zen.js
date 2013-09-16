@@ -3,13 +3,13 @@ var Zen = (function($) {
 
 	function each(array, fn) {
 		for (var i = 0, len = array.length; i < len; i++) {
-			if (fn(array[i]) === false) return;
+			if (fn.call(array[i], i) === false) return;
 		}
 	}
 	function includes(haystack, needle) {
 		var isIncluded = false;
-		each(haystack, function (e) {
-			return !(isIncluded = e.name === needle);
+		each(haystack, function () {
+			return !(isIncluded = this.name === needle);
 		});
 		return isIncluded;
 	}
@@ -40,19 +40,6 @@ var Zen = (function($) {
 		}
 	}
 
-	function getValue(dataSource, key, index) {
-		var sourceType = typeof(dataSource);
-
-		switch (sourceType) {
-		case 'function':
-			return dataSource(key, index);
-		case 'object':
-			var value = dataSource[key];
-			// RADAR not so cool...
-			return typeof(value) === 'object' ? value[index] : value;
-		}
-	}
-
 	function interpolate(value, dataSource, counter) {
 		if (value.indexOf('$') < 0) return value;
 
@@ -60,7 +47,7 @@ var Zen = (function($) {
 
 		if (/\$:[a-z]+/i.test(value) && dataSource) {
 			var key         = value.match(/\$:([a-z]+)/i)[1],
-			    replacement = getValue(dataSource, key, counter - 1);
+			    replacement = dataSource(key, counter - 1);
 
 			return value.replace('$:' + key, replacement);
 		}
@@ -73,35 +60,44 @@ var Zen = (function($) {
 		var node = document.createElement(name);
 
 		if (properties._text) {
-			node.innerText = interpolate(properties._text, dataSource, properties.counter);
+			// RADAR look out for IE issues
+			node.textContent = interpolate(properties._text, dataSource, properties.counter);
 		}
 
-		each(properties._attributes, function (attr) {
-			// interpolate
-			attr.value = interpolate(attr.value, dataSource, properties.counter);
-			node.setAttribute(attr.name, attr.value);
+		each(properties._attributes, function () {
+			this.value = interpolate(this.value, dataSource, properties.counter);
+			node.setAttribute(this.name, this.value);
 		});
 
 		// be recursive
 		return node;
 	}
 
-	function traverseTree(base, context, arrOfAttr){
-		var node = buildNode(base, arrOfAttr);
+	function traverseTree(base, context, dataSource){
+		var node = buildNode(base, dataSource);
 		context.appendChild(node);
-		for (var index = 0, length = base.children.length; index < length; index++) {
-			traverseTree(base.children[index], node, arrOfAttr);
-		}
+		each(base.children, function() {
+			traverseTree(this, node, dataSource);
+		});
 	}
 
 	var parser = emmet.require('abbreviationParser');
 
+	function getterFor(data) {
+		return function(key, index) {
+			var value = data[key];
+			return (typeof(value) === 'object') ? value[index] : value;
+		};
+	}
+
 	function Zen(expression, dataSource) {
+		if (typeof(dataSource) === 'object') dataSource = getterFor(dataSource);
+
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
-		for (var index = 0, length = nodes.length; index < length; index++) {
-			traverseTree(nodes[index], fragment, dataSource)
-		}
+		each(nodes, function () {
+			traverseTree(this, fragment, dataSource);
+		});
 		return fragment;
 	};
 

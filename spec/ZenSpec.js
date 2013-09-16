@@ -238,7 +238,11 @@ describe("Zen", function() {
 	});
 
 	it('should support objects as data source', function () {
-		var foo = Zen('#foo > #foo-$:b.item-$:i*3', { 'b': [1, 2, 3], 'i': ['foo', 'bar', 'baz'] }).firstChild;
+		var foo = Zen('#foo > #foo-$:b.item-$:i*3', {
+			'b': [1, 2, 3],
+			'i': ['foo', 'bar', 'baz']
+		}).firstChild;
+
 		var classNames = 'item-foo item-bar item-baz'.split(' ');
 		var ids = 'foo-1 foo-2 foo-3'.split(' ');
 		var items = foo.children;
@@ -250,18 +254,21 @@ describe("Zen", function() {
 	});
 
 	it('should support functions as data source', function () {
-		var i = 0, classNames = 'foo bar baz'.split(' ');
-		var foo = Zen('#foo > .item-$:i*3', function (key) {
-			return (key === 'i') ? classNames[i++] : 'xxx';
+		var classNames = 'foo bar baz'.split(' ');
+
+		var foo = Zen('#foo > .item-$:i*3', function (key, index) {
+			return (key === 'i') ? classNames[index] : 'xxx';
 		}).firstChild;
+
 		var items = foo.children;
 		expect(items.length).toBe(classNames.length);
+
 		for (var i = 0, len = items.length; i < len; i++) {
 			expect(items[i]).toHaveClass('item-' + classNames[i]);
 		}
 	});
 	it('should interpolate innerText values', function () {
-		var text = Zen('span{$:content}', {'content': 'Hello World!'}).firstChild.innerText;
+		var text = Zen('span{$:content}', {'content': 'Hello World!'}).firstChild.textContent;
 		expect(text).toBe('Hello World!');
 	});
 	it('should not interpolate escaped DOLLARs', function () {
