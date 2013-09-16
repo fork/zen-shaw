@@ -272,8 +272,15 @@ describe("Zen", function() {
 		expect(text).toBe('Hello World!');
 	});
 	it('should not interpolate escaped DOLLARs', function () {
-		var text = Zen('span{\$}').firstChild.innerText;
-		expect(text).toBe('$');
+		var text = Zen('span{You have to pay \$1000}').firstChild.textContent;
+		expect(text).toBe('You have to pay $1000');
+	});
+	it('should interpolate multiple values', function () {
+		var text = Zen('span{If $:two exists, $:one should be here}', {
+			'one': 'one', 'two': 'two'
+		}).firstChild.textContent;
+
+		expect(text).toBe('If two exists, one should be here');
 	});
 	it('should construct jQuery instance', function () {
 		expect(function () {
