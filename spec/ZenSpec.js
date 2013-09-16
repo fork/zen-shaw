@@ -1,15 +1,19 @@
 describe("Zen", function() {
 
+	function each(array, callback) {
+		for (var i = 0, len = array.length; i < len; i++) {
+			if (callback(array[i]) === false) return;
+		}
+	}
 	function traverse(node, callback) {
 		callback.call(node, node);
 
-		var children = node.childNodes;
-		for(var i = 0, len = children.length; i < len; i++) {
-			traverse(children[i], callback);
-		}
+		each(node.childNodes, function (child) {
+			traverse(child, callback);
+		});
 	}
 	
-	/*it("should return a Document Fragment", function() {
+	it("should return a Document Fragment", function() {
 		var siblings = Zen('span+span');
 		expect(siblings).toBeCalled('DocumentFragment');
 	});
@@ -29,11 +33,23 @@ describe("Zen", function() {
 	});
 
 	it("should be able to create elements with classes", function() {
-		var actual = Zen('.a-class').firstChild;
+		var actual = Zen('div.a-class').firstChild;
 		expect(actual).toHaveClass('a-class');
 	});
+	it("should be able to create elements with ids", function() {
+		var actual = Zen('div#an-id').firstChild;
+		expect(actual.id).toBe('an-id');
+	});
 
-	it("should be able to nest elements and support spaces", function() {
+	it('should support spaces in regular expression', function () {
+		expect(function () {
+			var actual = Zen('head > title').firstChild.outerHTML;
+			var expected = Zen('head>title').firstChild.outerHTML;
+			expect(actual).toBe(expected);
+		}).not.toThrow()
+	});
+
+	it("should be able to nest elements", function() {
 		var span = Zen('span > b').firstChild;
 		expect(span.tagName).toBe('SPAN');
 		expect(span.firstChild.tagName).toBe('B');
@@ -61,23 +77,19 @@ describe("Zen", function() {
 	});
 
 	it("should support attributes", function(){
-		var img = Zen('img[alt="Hello World!"]').firstChild;
-		expect(img.alt).toBe('Hello World!');
+		var span = Zen('span[title="Hello" rel="some-rel"]').firstChild;
+		expect(span.tagName).toBe('SPAN');
+		expect(span.title).toBe("Hello");
+		expect(span).toHaveAttribute("rel", "some-rel");
 	});
 
-	it("should support advanced selectors like build a table", function(){
+	it("should support deeper nested elements", function(){
 		var root = Zen('table>tr>td').firstChild;
 		var table = document.createElement('table');
 		traverse(root, function(node) {
 			expect(function () { table.appendChild(node); }).not.toThrow();
 			expect(node.nodeType).toBe(node.ELEMENT_NODE);
 		});
-	});
-
-	it("should support the div#name.one.two-Selector", function(){
-		var node = Zen('div#name.one.two').firstChild;
-		expect(node.id).toBe("name");
-		expect(node).toHaveClass("two");
 	});
 
 	it("should support colspan for tables", function(){
@@ -90,14 +102,6 @@ describe("Zen", function() {
 		var paragraph = Zen('p[title="a-title"]').firstChild;
 		expect(paragraph.tagName).toBe('P');
 		expect(paragraph.title).toBe("a-title");
-	});
-
-
-	it("should support title and rel for span", function(){
-		var span = Zen('span[title="Hello" rel="some-rel"]').firstChild;
-		expect(span.tagName).toBe('SPAN');
-		expect(span.title).toBe("Hello");
-		expect(span).toHaveAttribute("rel", "some-rel");
 	});
 
 	it("should support nested elements with classes", function(){
@@ -171,7 +175,7 @@ describe("Zen", function() {
 	});
 
 	it("should be able to handle the example of the zen-coding frontpage", function () {
-		var fragment = Zen("div#page>div.logo+ul#navigation>li*5>a");
+		var fragment = Zen("div#page > div.logo + ul#navigation > li*5 > a");
 		var renderer = document.createElement('div');
 		var expected = '<div id="page"><div class="logo"></div><ul id="navigation"><li><a></a></li><li><a></a></li><li><a></a></li><li><a></a></li><li><a></a></li></ul></div>';
 
@@ -180,39 +184,94 @@ describe("Zen", function() {
 	});
 	
 	it('should support inner HTML text', function(){
-		var paragraph = Zen('div>p{Text}').firstChild;
-		expected = '<p>Text</p>';
-		//expect(paragraph.tagName).toBe('DIV');
-		expect(paragraph.innerHTML).toBe(expected);
+		var container = Zen('div > p{Text}').firstChild;
+		html = '<p>Text</p>';
+		expect(container.innerHTML).toBe(html);
 	});
-	
-	it('should expand tagnames by context', function () {
-		var time;
-
-		expect(function () {
-			time = Zen('tr > .time').firstChild.firstChild;
-			expect(time.tagName).toBe('TD');
-		}).not.toThrow();
-	});*/
-	
-	it('should expand tagnames by context', function () {
-		var time;
-
-		expect(function () {
-			input = Zen('form > .[type]').firstChild.firstChild;
-			expect(input.tagName).toBe('INPUT');
-		}).not.toThrow();
+	it('should not error out if the tag is not explicitely named', function () {
+		expect(function () { Zen('.foo > .bar + .baz'); }).not.toThrow();
 	});
 
-	/*it('should support objects as data source', function () {
+	it('should default to LI in OL and UL', function () {
+		var item;
+
+		item = Zen('ol > .foo').firstChild.firstChild;
+		expect(item.tagName).toBe('LI');
+		item = Zen('ul > .foo').firstChild.firstChild;
+		expect(item.tagName).toBe('LI');
+	});
+	it('should default to TD in TR', function () {
+		var time = Zen('tr > .time').firstChild.firstChild;
+		expect(time.tagName).toBe('TD');
+	});
+	it('should default to TR in TABLE', function () {
+		var time = Zen('table > .time').firstChild.firstChild;
+		expect(time.tagName).toBe('TR');
+	});
+	it('should default to OPTION in SELECT', function () {
+		var select = Zen('select > [value="$"]*3').firstChild;
+		each(select.childNodes, function (child) {
+			expect(child.tagName).toBe('OPTION');
+		})
+	});
+	it('should default to UL in NAV', function () {
+		var list = Zen('nav > .navigation').firstChild.firstChild;
+		expect(list.tagName).toBe('UL');
+	});
+
+	it('should default to INPUT in FORM when type attribute is set', function () {
+		var input;
+
+		input = Zen('form > [type="foo"]').firstChild.firstChild;
+		expect(input.tagName).toBe('INPUT');
+	});
+	it('should default to META in HEAD when content attribute is set', function () {
+		var meta;
+
+		meta = Zen('head > [content="foo"]').firstChild.firstChild;
+		expect(meta.tagName).toBe('META');
+	});
+
+	it('should default to DIV in any other case', function () {
+		var container = Zen('.navigation').firstChild;
+		expect(container.tagName).toBe('DIV');
+	});
+
+	it('should support objects as data source', function () {
+		var foo = Zen('#foo > #foo-$:b.item-$:i*3', { 'b': [1, 2, 3], 'i': ['foo', 'bar', 'baz'] }).firstChild;
+		var classNames = 'item-foo item-bar item-baz'.split(' ');
+		var ids = 'foo-1 foo-2 foo-3'.split(' ');
+		var items = foo.children;
+		expect(items.length).toBe(classNames.length);
+		for (var i = 0, len = items.length; i < len; i++) {
+			expect(items[i]).toHaveClass(classNames[i]);
+			expect(items[i].id).toBe(ids[i]);
+		}
+	});
+
+	it('should support functions as data source', function () {
+		var i = 0, classNames = 'foo bar baz'.split(' ');
+		var foo = Zen('#foo > .item-$:i*3', function (key) {
+			return (key === 'i') ? classNames[i++] : 'xxx';
+		}).firstChild;
+		var items = foo.children;
+		expect(items.length).toBe(classNames.length);
+		for (var i = 0, len = items.length; i < len; i++) {
+			expect(items[i]).toHaveClass('item-' + classNames[i]);
+		}
+	});
+	it('should construct jQuery instance', function () {
 		expect(function () {
-			var foo = Zen('#foo > .item-$(i)*3', { 'i': ['foo', 'bar', 'baz'] }).firstChild;
-			var classNames = 'item-foo item-bar item-baz'.split(' ');
-			var items = foo.children;
-			expect(items.length).toBe(classNames.length);
-			for (var i = 0, len = items.length; i < len; i++) {
-				expect(items[i]).toHaveClass(classNames[i]);
-			}
+			var $$ = jQuery.zen('div').text('$.zen');
+			expect($$.text()).toBe('$.zen');
 		}).not.toThrow();
-	});*/
+	});
+	it('should replace content of jQuery instance', function () {
+		expect(function () {
+			var div = jQuery('<div>').text('test');
+			div.zen('span{$.fn.zen}');
+			expect(div.text()).toBe('$.fn.zen');
+		}).not.toThrow();
+	});
+
 });

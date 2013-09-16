@@ -1,11 +1,20 @@
-var Zen = (function() {
+var Zen = (function($) {
+	'use strict';
 
-
-
+	function each(array, fn) {
+		for (var i = 0, len = array.length; i < len; i++) {
+			if (fn(array[i]) === false) return;
+		}
+	}
+	function includes(haystack, needle) {
+		var isIncluded = false;
+		each(haystack, function (e) {
+			return !(isIncluded = e.name === needle);
+		});
+		return isIncluded;
+	}
 
 	function getTagNameByContext(context) {
-		console.log(context._attributes[1].name)
-		console.log(context.class);
 		switch (context.parent._name) {
 		case 'ol':
 		case 'ul':
@@ -19,40 +28,57 @@ var Zen = (function() {
 		case 'nav':
 			return 'ul';
 		case 'form':
-			var type = context._attributes[1].name;
-			if (type === 'type') { 
-			return 'input';
-			}
-			else return 'div';
+			var isInput = includes(context._attributes, 'type');
+			return isInput ? 'input' : 'div';
 		case 'head':
-			var name = context._attributes[1].name;
-			var content = context._attributes[1].name;
-			if (name === 'name' && content === 'content') { 
-			return 'meta';
-			}
-			else return 'div';
+			var isMeta = includes(context._attributes, 'content');
+			return isMeta ? 'meta' : 'div';
 		default:
 			return 'div';
 		}
 	}
 
-	function buildNode(properties, arrOfAttr) {
-		properties._name = properties._name || getTagNameByContext(properties);
-		properties._text = properties._text;
-		var node = document.createElement(properties._name);
-		var attributes = properties._attributes, attr;
-		node.innerHTML =  properties._text;
-		for (var i = 0, len = attributes.length; i < len; i++) {
-			attr = attributes[i];
-			if (attr.value && attr.value.indexOf('$') > -1){
-			  if (arrOfAttr) {
-  		    attr.value = attr.value.replace("$", arrOfAttr.i[properties.counter - 1]);
-  		  } else {
-  		    attr.value = attr.value.replace("$", properties.counter);
-  		  }
-			}
-			node.setAttribute(attr.name, attr.value);
+	var inspect = Object.prototype.toString;
+
+	function getValue(dataSource, key, index) {
+		var sourceType = typeof(dataSource);
+
+		switch (sourceType) {
+		case 'function':
+			return dataSource(key, index);
+		case 'object':
+			var value = dataSource[key];
+			// RADAR not so cool...
+			return typeof(value) === 'object' ? value[index] : value;
+		default:
+			return undefined;
 		}
+	}
+
+	function buildNode(properties, dataSource) {
+		properties._name = properties._name || getTagNameByContext(properties);
+
+		var node = document.createElement(properties._name);
+		var attributes = properties._attributes;
+		node.innerHTML = properties._text;
+
+		each(attributes, function (attr) {
+			// interpolate
+			if (attr.value && attr.value.indexOf('$') > -1) {
+				if (/\$:[a-z]+/i.test(attr.value) && dataSource) {
+					var key   = attr.value.match(/\$:([a-z]+)/i)[1],
+					    index = properties.counter - 1,
+					    value = getValue(dataSource, key, index);
+
+					attr.value = attr.value.replace('$:' + key, value);
+				} else {
+					attr.value = attr.value.replace("$", properties.counter);
+				}
+			}
+
+			node.setAttribute(attr.name, attr.value);
+		});
+
 		// be recursive
 		return node;
 	}
@@ -67,15 +93,30 @@ var Zen = (function() {
 
 	var parser = emmet.require('abbreviationParser');
 
-	return function Zen(expression, arrOfAttr){
-
+	function Zen(expression, dataSource) {
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
 		for (var index = 0, length = nodes.length; index < length; index++) {
-			traverseTree(nodes[index], fragment, arrOfAttr)
+			traverseTree(nodes[index], fragment, dataSource)
 		}
 		return fragment;
-
 	};
 
-}());
+	if ($) {
+		$.zen = function(expression, dataSource) {
+			var fragment = Zen(expression, dataSource);
+			return $(fragment);
+		}
+		$.fn.zen = function(expression, dataSource) {
+			var fragment = Zen(expression, dataSource);
+			return this.each(function() {
+				var clone = fragment.cloneNode(true);
+				this.innerHTML = '';
+				this.appendChild(clone);
+			});
+		};
+	}
+
+	return Zen;
+
+})(window.jQuery);
