@@ -60,7 +60,7 @@ var Zen = (function($) {
 
 		var node = document.createElement(properties._name);
 		var attributes = properties._attributes;
-		node.innerHTML = properties._text;
+		node.innerText = properties._text;
 
 		each(attributes, function (attr) {
 			// interpolate
