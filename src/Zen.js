@@ -14,8 +14,10 @@ var Zen = (function($) {
 		return isIncluded;
 	}
 
-	function getTagNameByContext(context) {
-		switch (context.parent._name) {
+	function getName(properties) {
+		if (properties._name) return properties._name;
+
+		switch (properties.parent._name) {
 		case 'ol':
 		case 'ul':
 			return 'li';
@@ -28,17 +30,15 @@ var Zen = (function($) {
 		case 'nav':
 			return 'ul';
 		case 'form':
-			var isInput = includes(context._attributes, 'type');
+			var isInput = includes(properties._attributes, 'type');
 			return isInput ? 'input' : 'div';
 		case 'head':
-			var isMeta = includes(context._attributes, 'content');
+			var isMeta = includes(properties._attributes, 'content');
 			return isMeta ? 'meta' : 'div';
 		default:
 			return 'div';
 		}
 	}
-
-	var inspect = Object.prototype.toString;
 
 	function getValue(dataSource, key, index) {
 		var sourceType = typeof(dataSource);
@@ -50,32 +50,35 @@ var Zen = (function($) {
 			var value = dataSource[key];
 			// RADAR not so cool...
 			return typeof(value) === 'object' ? value[index] : value;
-		default:
-			return undefined;
 		}
 	}
 
+	function interpolate(value, dataSource, counter) {
+		if (value.indexOf('$') < 0) return value;
+
+		// TODO skip escaped DOLLARs => \$
+
+		if (/\$:[a-z]+/i.test(value) && dataSource) {
+			var key         = value.match(/\$:([a-z]+)/i)[1],
+			    replacement = getValue(dataSource, key, counter - 1);
+
+			return value.replace('$:' + key, replacement);
+		}
+
+		return value.replace('$', counter);
+	}
+
 	function buildNode(properties, dataSource) {
-		properties._name = properties._name || getTagNameByContext(properties);
+		var name = getName(properties);
+		var node = document.createElement(name);
 
-		var node = document.createElement(properties._name);
-		var attributes = properties._attributes;
-		node.innerText = properties._text;
+		if (properties._text) {
+			node.innerText = interpolate(properties._text, dataSource, properties.counter);
+		}
 
-		each(attributes, function (attr) {
+		each(properties._attributes, function (attr) {
 			// interpolate
-			if (attr.value && attr.value.indexOf('$') > -1) {
-				if (/\$:[a-z]+/i.test(attr.value) && dataSource) {
-					var key   = attr.value.match(/\$:([a-z]+)/i)[1],
-					    index = properties.counter - 1,
-					    value = getValue(dataSource, key, index);
-
-					attr.value = attr.value.replace('$:' + key, value);
-				} else {
-					attr.value = attr.value.replace("$", properties.counter);
-				}
-			}
-
+			attr.value = interpolate(attr.value, dataSource, properties.counter);
 			node.setAttribute(attr.name, attr.value);
 		});
 

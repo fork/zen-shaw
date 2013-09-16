@@ -260,17 +260,25 @@ describe("Zen", function() {
 			expect(items[i]).toHaveClass('item-' + classNames[i]);
 		}
 	});
+	it('should interpolate innerText values', function () {
+		var text = Zen('span{$:content}', {'content': 'Hello World!'}).firstChild.innerText;
+		expect(text).toBe('Hello World!');
+	});
+	it('should not interpolate escaped DOLLARs', function () {
+		var text = Zen('span{\$}').firstChild.innerText;
+		expect(text).toBe('$');
+	});
 	it('should construct jQuery instance', function () {
 		expect(function () {
-			var $$ = jQuery.zen('div').text('$.zen');
-			expect($$.text()).toBe('$.zen');
+			var $$ = jQuery.zen('div').text('jQuery.zen');
+			expect($$.text()).toBe('jQuery.zen');
 		}).not.toThrow();
 	});
 	it('should replace content of jQuery instance', function () {
 		expect(function () {
 			var div = jQuery('<div>').text('test');
-			div.zen('span{$.fn.zen}');
-			expect(div.text()).toBe('$.fn.zen');
+			div.zen('span{jQuery.fn.zen}');
+			expect(div.text()).toBe('jQuery.fn.zen');
 		}).not.toThrow();
 	});
 
