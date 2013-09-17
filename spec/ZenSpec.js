@@ -36,6 +36,7 @@ describe("Zen", function() {
 		var actual = Zen('div.a-class').firstChild;
 		expect(actual).toHaveClass('a-class');
 	});
+	
 	it("should be able to create elements with ids", function() {
 		var actual = Zen('div#an-id').firstChild;
 		expect(actual.id).toBe('an-id');
@@ -188,6 +189,7 @@ describe("Zen", function() {
 		html = '<p>Text</p>';
 		expect(container.innerHTML).toBe(html);
 	});
+	
 	it('should not error out if the tag is not explicitely named', function () {
 		expect(function () { Zen('.foo > .bar + .baz'); }).not.toThrow();
 	});
@@ -200,20 +202,24 @@ describe("Zen", function() {
 		item = Zen('ul > .foo').firstChild.firstChild;
 		expect(item.tagName).toBe('LI');
 	});
+	
 	it('should default to TD in TR', function () {
 		var time = Zen('tr > .time').firstChild.firstChild;
 		expect(time.tagName).toBe('TD');
 	});
+	
 	it('should default to TR in TABLE', function () {
 		var time = Zen('table > .time').firstChild.firstChild;
 		expect(time.tagName).toBe('TR');
 	});
+	
 	it('should default to OPTION in SELECT', function () {
 		var select = Zen('select > [value="$"]*3').firstChild;
 		each(select.childNodes, function (child) {
 			expect(child.tagName).toBe('OPTION');
 		})
 	});
+	
 	it('should default to UL in NAV', function () {
 		var list = Zen('nav > .navigation').firstChild.firstChild;
 		expect(list.tagName).toBe('UL');
@@ -225,6 +231,7 @@ describe("Zen", function() {
 		input = Zen('form > [type="foo"]').firstChild.firstChild;
 		expect(input.tagName).toBe('INPUT');
 	});
+	
 	it('should default to META in HEAD when content attribute is set', function () {
 		var meta;
 
@@ -267,14 +274,17 @@ describe("Zen", function() {
 			expect(items[i]).toHaveClass('item-' + classNames[i]);
 		}
 	});
+	
 	it('should interpolate innerText values', function () {
 		var text = Zen('span{$:content}', {'content': 'Hello World!'}).firstChild.textContent;
 		expect(text).toBe('Hello World!');
 	});
+	
 	it('should not interpolate escaped DOLLARs', function () {
 		var text = Zen('span{You have to pay \$1000}').firstChild.textContent;
 		expect(text).toBe('You have to pay $1000');
 	});
+	
 	it('should interpolate multiple values', function () {
 		var text = Zen('span{If $:two exists, $:one should be here}', {
 			'one': 'one', 'two': 'two'
@@ -282,12 +292,14 @@ describe("Zen", function() {
 
 		expect(text).toBe('If two exists, one should be here');
 	});
+	
 	it('should construct jQuery instance', function () {
 		expect(function () {
 			var $$ = jQuery.zen('div').text('jQuery.zen');
 			expect($$.text()).toBe('jQuery.zen');
 		}).not.toThrow();
 	});
+	
 	it('should replace content of jQuery instance', function () {
 		expect(function () {
 			var div = jQuery('<div>').text('test');
