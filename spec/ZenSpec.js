@@ -33,8 +33,10 @@ describe("Zen", function() {
 	});
 
 	it("should be able to create elements with classes", function() {
-		var actual = Zen('div.a-class').firstChild;
+		var actual = Zen('div.a-class.b-class').firstChild;
 		expect(actual).toHaveClass('a-class');
+		expect(actual).toHaveClass('b-class');
+		expect(actual).not.toHaveClass('c-class');
 	});
 	
 	it("should be able to create elements with ids", function() {

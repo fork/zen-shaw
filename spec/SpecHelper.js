@@ -6,7 +6,7 @@ beforeEach(function() {
 			return toString.call(this.actual) === '[object ' + name +']';
 		},
 		toHaveClass: function(className) {
-			return this.actual.classList.contains(className);
+      return this.actual.className && new RegExp("(^|\\s)" + className + "(\\s|$)").test(this.actual.className);
 		},
 		toHaveAttribute: function(attrName, value){
 			return this.actual.getAttribute(attrName) == value;
