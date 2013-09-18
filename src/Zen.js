@@ -41,25 +41,27 @@ var Zen = (function($) {
 	}
 	
 	function replaceDollar(value, dataSource, counter){
-	  var key = value.match(/\$:([a-z]+)/i)[1],
+		var key = value.match(/\$:([a-z]+)/i)[1],
 		    replacement = dataSource(key, counter - 1);
 		return value.replace('$:' + key, replacement);
 	}
 	
 	function interpolate(value, dataSource, counter) {
-	  var result = value;
+		var result = value;
     
 		if (value.indexOf('$') < 0) return value;
+
+		// this is the RegExp you want /^|[^\\]$:[a-z]+/i
 
 		if((result == "$:content") || (/\-\$:[a-z]+/i.test(value) && dataSource)){
 		  return replaceDollar(value, dataSource, counter);
 		}
-		
+
 		if (/\$:[a-z]+/i.test(value) && dataSource) {
 		  var key = result.match(/\$:([a-z]+)\s/g);
 		  for (var i = 0; i < key.length; i++) {
 		    var replacement = key[i].substring(2, key[i].length);
-  			result = result.replace(key[i], replacement);
+			result = result.replace(key[i], replacement);
 		  }
 			return result;
 		}
@@ -67,7 +69,7 @@ var Zen = (function($) {
 		if (value.indexOf('$') && value.indexOf("$:") == -1 && value.indexOf("-$") == -1) {
 		  return value.replace(/\$/, '$');
 		}
-		
+
 		return value.replace('$', counter);
 	}
 

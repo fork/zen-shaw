@@ -1,5 +1,21 @@
 describe("Zen", function() {
 
+	// idea taken from http://stackoverflow.com/a/1349426
+	function makeAB()
+	{
+		var text = "";
+		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+		for( var i=0; i < 5; i++ ) {
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
+
+		return text;
+	}
+	function rand(limit) {
+		limit = limit || 1000;
+		return Math.round(Math.random() * limit);
+	}
 	function each(array, callback) {
 		for (var i = 0, len = array.length; i < len; i++) {
 			if (callback(array[i]) === false) return;
@@ -33,10 +49,10 @@ describe("Zen", function() {
 	});
 
 	it("should be able to create elements with classes", function() {
-		var actual = Zen('div.a-class.b-class').firstChild;
-		expect(actual).toHaveClass('a-class');
-		expect(actual).toHaveClass('b-class');
-		expect(actual).not.toHaveClass('c-class');
+		var actual = Zen('div.time.frame').firstChild;
+		expect(actual).toHaveClass('time');
+		expect(actual).toHaveClass('frame');
+		expect(actual).not.toHaveClass('a-class');
 	});
 	
 	it("should be able to create elements with ids", function() {
@@ -116,7 +132,7 @@ describe("Zen", function() {
 		expect(item).toHaveClass("item");
 	});
 
-	it("should support the Plus-Operator", function(){
+	it("should support the + operator", function(){
 		var tagNames = 'P DIV SPAN'.split(' ');
 		var fragment = Zen('p+div+span');
 		var nodes = fragment.childNodes;
@@ -278,21 +294,30 @@ describe("Zen", function() {
 	});
 	
 	it('should interpolate innerText values', function () {
-		var text = Zen('span{$:content}', {'content': 'Hello World!'}).firstChild.textContent;
-		expect(text).toBe('Hello World!');
+		var text = Zen('span{$:i $}', {'i': 'Hello World!'}).firstChild.textContent;
+		expect(text).toBe('Hello World! 1');
 	});
 	
-	it('should not interpolate escaped DOLLARs', function () {
-		var text = Zen('span{You have to pay \$1000}').firstChild.textContent;
-		expect(text).toBe('You have to pay $1000');
+	it('should not interpolate escaped DOLLARs(\\$)', function () {
+		var text = Zen('span{You have to $:i \$1000}', {'i': 'save'}).firstChild.textContent;
+		expect(text).toBe('You have to save $1000');
 	});
 	
 	it('should interpolate multiple values', function () {
-		var text = Zen('span{If $:two exists, $:one should be here}', {
-			'one': 'one', 'two': 'two'
-		}).firstChild.textContent;
+		var data = {}, expression = '{We can have multiples, like ', expectedContent = 'We can have multiples, like ';
+		for (var i = 0; i < rand(); i++) {
+			var key = makeAB();
+			var value = makeAB();
+			data[key] = value;
+			expression += '$:'.concat(key, ' ');
+			expectedContent += value + ' ';
+		}
+		expression += '...}';
+		expectedContent += '...';
 
-		expect(text).toBe('If two exists, one should be here');
+		var text = Zen(expression, data).firstChild.textContent;
+
+		expect(text).toBe(expectedContent);
 	});
 	
 	it('should construct jQuery instance', function () {
