@@ -109,7 +109,7 @@ var Zen = (function($) {
 	}
 
 	function Zen(expression, dataSource) {
-		if (typeof(dataSource) === 'object') dataSource = getterFor(dataSource);
+		if (typeof(dataSource) !== 'function') dataSource = getterFor(dataSource);
 
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
