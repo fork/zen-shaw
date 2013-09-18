@@ -302,6 +302,15 @@ describe("Zen", function() {
 		var text = Zen('span{You have to $:i \$1000}', {'i': 'save'}).firstChild.textContent;
 		expect(text).toBe('You have to save $1000');
 	});
+	it('should handle missing data sources', function () {
+		expect(function () {
+			Zen('What $:did happen?');
+		}).not.toThrow();
+	});
+	
+	it('should not replace the same interpolate expression twice', function () {
+		// TODO
+	});
 	
 	it('should interpolate multiple values', function () {
 		var data = {}, expression = '{We can have multiples, like ', expectedContent = 'We can have multiples, like ';
