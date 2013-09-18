@@ -13,7 +13,7 @@ describe("Zen", function() {
 		return text;
 	}
 	function rand(limit) {
-		limit = limit || 1000;
+		limit = limit || 10;
 		return Math.round(Math.random() * limit);
 	}
 	function each(array, callback) {
@@ -308,9 +308,15 @@ describe("Zen", function() {
 		for (var i = 0; i < rand(); i++) {
 			var key = makeAB();
 			var value = makeAB();
-			data[key] = value;
-			expression += '$:'.concat(key, ' ');
-			expectedContent += value + ' ';
+
+			// prevent duplicates
+			if (data.hasOwnProperty(key)) {
+				i--;
+			} else {
+				data[key] = value;
+				expression += '$:'.concat(key, ' ');
+				expectedContent += value + ' ';
+			}
 		}
 		expression += '...}';
 		expectedContent += '...';
