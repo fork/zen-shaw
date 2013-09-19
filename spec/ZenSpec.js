@@ -13,7 +13,7 @@ describe("Zen", function() {
 		return text;
 	}
 	function rand(limit) {
-		limit = limit || 10;
+		limit = limit || 1000;
 		return Math.round(Math.random() * limit);
 	}
 	function each(array, callback) {
@@ -302,30 +302,15 @@ describe("Zen", function() {
 		var text = Zen('span{You have to $:i \\$1000}', {'i': 'save'}).firstChild.textContent;
 		expect(text).toBe('You have to save $1000');
 	});
-	it('should handle missing data sources', function () {
-		expect(function () {
-			Zen('What $:did happen?');
-		}).not.toThrow();
-	});
-	
-	it('should not replace the same interpolate expression twice', function () {
-		// TODO
-	});
 	
 	it('should interpolate multiple values', function () {
 		var data = {}, expression = '{We can have multiples, like ', expectedContent = 'We can have multiples, like ';
 		for (var i = 0; i < rand(); i++) {
 			var key = makeAB();
 			var value = makeAB();
-
-			// prevent duplicates
-			if (data.hasOwnProperty(key)) {
-				i--;
-			} else {
-				data[key] = value;
-				expression += '$:'.concat(key, ' ');
-				expectedContent += value + ' ';
-			}
+			data[key] = value;
+			expression += '$:'.concat(key, ' ');
+			expectedContent += value + ' ';
 		}
 		expression += '...}';
 		expectedContent += '...';
