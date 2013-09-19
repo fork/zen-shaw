@@ -41,36 +41,33 @@ var Zen = (function($) {
 	}
 	
 	function replaceDollar(value, dataSource, counter){
-		var key = value.match(/\$:([a-z]+)/i)[1],
+		var re = /\$:([a-z]+)/i,
+		    key = re.exec(value)[1],
 		    replacement = dataSource(key, counter - 1);
-		return value.replace('$:' + key, replacement);
+		    if(/\\\$/.test(value)) {
+    		  value = value.replace('\\\$', '$');
+    		}
+		    return value.replace('$:' + key, replacement);
 	}
 	
 	function interpolate(value, dataSource, counter) {
 		var result = value;
-    
-		if (value.indexOf('$') < 0) return value;
+		if (result.indexOf('$') < 0) return result;	  
 
-		// this is the RegExp you want /^|[^\\]$:[a-z]+/i
-
-		if((result == "$:content") || (/\-\$:[a-z]+/i.test(value) && dataSource)){
+		
+		if((/^|[^\\]$:[a-z]+/i.test(value) && dataSource)){
 		  return replaceDollar(value, dataSource, counter);
 		}
 
-		if (/\$:[a-z]+/i.test(value) && dataSource) {
-		  var key = result.match(/\$:([a-z]+)\s/g);
+		if (/\$:[a-z]+/i.test(value) && dataSource) {		  
+		  var key = result.match(/\$:([a-z]+)/gi);
 		  for (var i = 0; i < key.length; i++) {
-		    var replacement = key[i].substring(2, key[i].length);
-			result = result.replace(key[i], replacement);
+		    var replacement = dataSource(key[i], counter - 1);
+		    return result.replace(key[i], replacement);
 		  }
-			return result;
 		}
-		
-		if (value.indexOf('$') && value.indexOf("$:") == -1 && value.indexOf("-$") == -1) {
-		  return value.replace(/\$/, '$');
-		}
-
-		return value.replace('$', counter);
+    
+		return result.replace('$', counter);
 	}
 
 	function buildNode(properties, dataSource) {

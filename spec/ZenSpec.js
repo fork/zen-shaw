@@ -299,7 +299,7 @@ describe("Zen", function() {
 	});
 	
 	it('should not interpolate escaped DOLLARs(\\$)', function () {
-		var text = Zen('span{You have to $:i \$1000}', {'i': 'save'}).firstChild.textContent;
+		var text = Zen('span{You have to $:i \\$1000}', {'i': 'save'}).firstChild.textContent;
 		expect(text).toBe('You have to save $1000');
 	});
 	
