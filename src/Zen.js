@@ -46,6 +46,8 @@ var Zen = (function($) {
 		    replacement = dataSource(key, counter - 1);
 		    if(/\\\$/.test(value)) {
     		  value = value.replace('\\\$', '$');
+    		} else if (/^((?!\:)(?!\-)(?!\\)[\$]).*$/.test(value)) {
+    		  value = value.replace(/([\$]{1})(?!\:)/, counter);
     		}
 		    return value.replace('$:' + key, replacement);
 	}
