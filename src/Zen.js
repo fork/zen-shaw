@@ -1,6 +1,9 @@
 var Zen = (function($) {
 	'use strict';
 
+	var dataSource,
+		parser = emmet.require('abbreviationParser');;
+
 	function each(array, fn) {
 		for (var i = 0, len = array.length; i < len; i++) {
 			if (fn.call(array[i], i) === false) return;
@@ -40,89 +43,144 @@ var Zen = (function($) {
 		}
 	}
 	
-	function replaceDollar(value, dataSource, counter){
-		var re = /\$:([a-z]+)/i,
-		    key = re.exec(value)[1],
-		    replacement = dataSource(key, counter - 1);
-		    if(/\\\$/.test(value)) {
-    		  value = value.replace('\\\$', '$');
-    		} else if (/^((?!\:)(?!\-)(?!\\)[\$]).*$/.test(value)) {
-    		  value = value.replace(/([\$]{1})(?!\:)/, counter);
-    		}
-		    return value.replace('$:' + key, replacement);
-	}
 	
-	function interpolate(value, dataSource, counter) {
+	function interpolate(value, counter) {
 		var result = value;
-		if (result.indexOf('$') < 0) return result;	  
-
-		
-		if((/^|[^\\]$:[a-z]+/i.test(value) && dataSource)){
-		  return replaceDollar(value, dataSource, counter);
+		var key = result.match(/\$:([a-z]+)/i);
+		var replacement = dataSource(key[1], counter - 1);
+		if(typeof replacement !== 'undefined') { 
+			return result.replace(key[0], replacement);
+		} else {
+			return result.replace(key[0], "[[specify value for "+key[0]+"]]");
 		}
-
-		if (/\$:[a-z]+/i.test(value) && dataSource) {		  
-		  var key = result.match(/\$:([a-z]+)/gi);
-		  for (var i = 0; i < key.length; i++) {
-		    var replacement = dataSource(key[i], counter - 1);
-		    return result.replace(key[i], replacement);
-		  }
-		}
-    
-		return result.replace('$', counter);
 	}
 
-	function buildNode(properties, dataSource) {
+	function checkMarker(textRaw, position) {
+		if(textRaw.charAt(position-1) == "\\") return "escaped";
+		if(textRaw.charAt(position+1) == ":") return "token";
+		return "counter";
+	}
+
+	function buildNodeText(textRaw, counter) {
+		var occurrences = getIndices(textRaw),
+			searchText = "",
+			text = textRaw.substring(0, occurrences[0]),
+			startPos = occurrences[0],
+			endPos = (occurrences.length>1) ? occurrences[1] : textRaw.length,
+			mode;
+
+		for(var i=0;i<occurrences.length;i++) {
+			
+			searchText = textRaw.substring(startPos,endPos);
+			mode = checkMarker(textRaw, occurrences[i]);
+			
+			
+			if(mode ==  'escaped') {
+				text+=searchText;
+				text=text.replace(/\\/,"");
+			}
+			
+			if(mode ==  'token') {
+				text+=interpolate(searchText, counter);
+			}
+			
+			if(mode ==  'counter') {
+				searchText=searchText.replace("$",counter);
+				text+=searchText;
+			}
+			
+			startPos = endPos;
+			endPos = (occurrences.length>=i+3) ? occurrences[i+2] : textRaw.length;
+		}
+
+		return text;
+	}
+
+	function getIndices(value) {
+	    var startIndex = 0;
+	    var index, indices = [];
+	    while ((index = value.indexOf("$", startIndex)) > -1) {
+	        indices.push(index);
+	        startIndex = index + 1;
+	    }
+	    return indices;
+	}
+
+	function buildNode(properties) {
 		var name = getName(properties);
 		var node = document.createElement(name);
 
 		if (properties._text) {
 			// RADAR look out for IE issues
-			node.textContent = interpolate(properties._text, dataSource, properties.counter);
+			// textContent not supported by IE8. Use a shim.
+			if(properties._text.indexOf('$') < 0) {
+				node.textContent = properties._text;
+			} else {
+				node.textContent = buildNodeText(properties._text, properties.counter);
+			}
 		}
 
 		each(properties._attributes, function () {
-			this.value = interpolate(this.value, dataSource, properties.counter);
+			this.value = buildNodeText(this.value, properties.counter);
 			node.setAttribute(this.name, this.value);
 		});
 
-		// be recursive
 		return node;
 	}
 
-	function traverseTree(base, context, dataSource){
-		var node = buildNode(base, dataSource);
+	function traverseTree(base, context){
+		var node = buildNode(base);
 		context.appendChild(node);
 		each(base.children, function() {
-			traverseTree(this, node, dataSource);
+			traverseTree(this, node);
 		});
 	}
-
-	var parser = emmet.require('abbreviationParser');
 
 	function getterFor(data) {
 		return function(key, index) {
 			var value = data[key];
-			return (typeof(value) === 'object') ? value[index] : value;
+
+			if (typeof value === 'object') {
+				if (value.length > index) {
+					return value[index];
+				} else {
+					return value[index-value.length]
+				}
+			}
+
+			if (typeof value === 'function') {
+				return value.call(this, index);
+			}
+
+			return value;
 		};
 	}
 
-	function Zen(expression, dataSource) {
-		if (typeof(dataSource) === 'object') dataSource = getterFor(dataSource);
+	function Zen(expression, inputDataSource) {
+		if(typeof(inputDataSource) == 'undefined') {
+			dataSource = function() { return false }
+		}
+		else if (typeof(inputDataSource) !== 'function') {
+			dataSource = getterFor(inputDataSource);
+		} else {
+			dataSource = inputDataSource;
+		}
 
 		var fragment = document.createDocumentFragment();
 		var nodes = parser.parse(expression).children;
 		each(nodes, function () {
-			traverseTree(this, fragment, dataSource);
+			traverseTree(this, fragment);
 		});
 		return fragment;
 	};
 
 	if ($) {
+
 		$.zen = function(expression, dataSource) {
 			var fragment = Zen(expression, dataSource);
 			return $(fragment);
 		}
+
 		$.fn.zen = function(expression, dataSource) {
 			var fragment = Zen(expression, dataSource);
 			return this.each(function() {
