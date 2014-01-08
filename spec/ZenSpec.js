@@ -335,4 +335,9 @@ describe("Zen", function() {
 		}).not.toThrow();
 	});
 
+	it('should be able to detect the tag name of implicit declared tags', function () {
+		var actual = Zen('nav>#test-ul>{Test1}+{Test2}').querySelector('#test-ul :first-child');
+		expect(actual.tagName).toBe('LI');
+	});
+
 });

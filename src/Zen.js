@@ -120,6 +120,10 @@ var Zen = (function($) {
 			}
 		}
 
+		each(properties.children, function () {
+			this.parent._name = name;
+		});
+
 		each(properties._attributes, function () {
 			this.value = buildNodeText(this.value, properties.counter);
 			node.setAttribute(this.name, this.value);
