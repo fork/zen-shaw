@@ -8,3 +8,6 @@ Use Emmet-style HTML shortcode strings to buld documentFragments or replace DOM-
 2. Install the _Grunt-CLI_ as Root: `sudo npm install -g grunt-cli`
 3. Issue `npm install` in project directory to get Grunt and it's dependencies
 4. Issue `grunt` in project directory to build an uglified library.
+
+### Issues
+Visit [our Atlassian Jira](https://jira.fork.de/browse/ZEN) instance to post issues.
