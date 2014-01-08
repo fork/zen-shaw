@@ -6,5 +6,5 @@ Use Emmet-style HTML shortcode strings to buld documentFragments or replace DOM-
 ### Build
 1. Install node on your machine.
 2. Install the _Grunt-CLI_ as Root: `sudo npm install -g grunt-cli`
-3. Issue `npm install grunt` in project directory to get Grunt and it's dependencies
+3. Issue `npm install` in project directory to get Grunt and it's dependencies
 4. Issue `grunt` in project directory to build an uglified library.
