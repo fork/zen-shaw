@@ -17,15 +17,18 @@
 	<!-- include source files here... -->
 	<script src="src/Zen.js" type="text/javascript" charset="utf-8"></script>
 
-	
+	<script>
+	$(document).ready(function() {
+		$('body').html($.zen('nav>#test-ul>{Test1}+{Test2}'));
+	})
+	</script>
 
 
 </head>
 
 <body>
-	<!-- Here is a Emmet Shortcode example: 
-	div>ul>li{List Item #Replace-$}*3 
--->
+	<!-- Here is a Emmet Shortcode example: -->
+	
 
 </body>
 </html>
