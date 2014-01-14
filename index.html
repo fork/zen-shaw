@@ -43,23 +43,23 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Zen = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($)</span> {</span>
-<span class="hljs-pi">	'use strict'</span>;
+            <div class="content"><div class='highlight'><pre><span class="keyword">var</span> Zen = (<span class="function"><span class="keyword">function</span><span class="params">($)</span> {</span>
+	<span class="string">'use strict'</span>;
 
-	<span class="hljs-keyword">var</span> dataSource,
-		parser = emmet.require(<span class="hljs-string">'abbreviationParser'</span>);;
+	<span class="keyword">var</span> dataSource,
+		parser = emmet.require(<span class="string">'abbreviationParser'</span>);;
 
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">each</span><span class="hljs-params">(array, fn)</span> {</span>
-		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = array.length; i &lt; len; i++) {
-			<span class="hljs-keyword">if</span> (fn.call(array[i], i) === <span class="hljs-literal">false</span>) <span class="hljs-keyword">return</span>;
+	<span class="function"><span class="keyword">function</span> <span class="title">each</span><span class="params">(array, fn)</span> {</span>
+		<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, len = array.length; i &lt; len; i++) {
+			<span class="keyword">if</span> (fn.call(array[i], i) === <span class="literal">false</span>) <span class="keyword">return</span>;
 		}
 	}
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">includes</span><span class="hljs-params">(haystack, needle)</span> {</span>
-		<span class="hljs-keyword">var</span> isIncluded = <span class="hljs-literal">false</span>;
-		each(haystack, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-			<span class="hljs-keyword">return</span> !(isIncluded = <span class="hljs-keyword">this</span>.name === needle);
+	<span class="function"><span class="keyword">function</span> <span class="title">includes</span><span class="params">(haystack, needle)</span> {</span>
+		<span class="keyword">var</span> isIncluded = <span class="literal">false</span>;
+		each(haystack, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+			<span class="keyword">return</span> !(isIncluded = <span class="keyword">this</span>.name === needle);
 		});
-		<span class="hljs-keyword">return</span> isIncluded;
+		<span class="keyword">return</span> isIncluded;
 	}</pre></div></div>
             
         </li>
@@ -76,10 +76,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getName</span><span class="hljs-params">(properties)</span> {</span>
-		<span class="hljs-keyword">if</span> (properties._name) <span class="hljs-keyword">return</span> properties._name;
+            <div class="content"><div class='highlight'><pre>	<span class="function"><span class="keyword">function</span> <span class="title">getName</span><span class="params">(properties)</span> {</span>
+		<span class="keyword">if</span> (properties._name) <span class="keyword">return</span> properties._name;
 
-		<span class="hljs-keyword">switch</span> (properties.parent._name) {</pre></div></div>
+		<span class="keyword">switch</span> (properties.parent._name) {</pre></div></div>
             
         </li>
         
@@ -103,9 +103,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'ol'</span>:
-		<span class="hljs-keyword">case</span> <span class="hljs-string">'ul'</span>:
-			<span class="hljs-keyword">return</span> <span class="hljs-string">'li'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">case</span> <span class="string">'ol'</span>:
+		<span class="keyword">case</span> <span class="string">'ul'</span>:
+			<span class="keyword">return</span> <span class="string">'li'</span>;</pre></div></div>
             
         </li>
         
@@ -148,10 +148,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'table'</span>:
-			<span class="hljs-keyword">return</span> <span class="hljs-string">'tr'</span>;
-		<span class="hljs-keyword">case</span> <span class="hljs-string">'tr'</span>:
-			<span class="hljs-keyword">return</span> <span class="hljs-string">'td'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">case</span> <span class="string">'table'</span>:
+			<span class="keyword">return</span> <span class="string">'tr'</span>;
+		<span class="keyword">case</span> <span class="string">'tr'</span>:
+			<span class="keyword">return</span> <span class="string">'td'</span>;</pre></div></div>
             
         </li>
         
@@ -173,8 +173,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'select'</span>:
-			<span class="hljs-keyword">return</span> <span class="hljs-string">'option'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">case</span> <span class="string">'select'</span>:
+			<span class="keyword">return</span> <span class="string">'option'</span>;</pre></div></div>
             
         </li>
         
@@ -195,8 +195,8 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'nav'</span>:
-			<span class="hljs-keyword">return</span> <span class="hljs-string">'ul'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">case</span> <span class="string">'nav'</span>:
+			<span class="keyword">return</span> <span class="string">'ul'</span>;</pre></div></div>
             
         </li>
         
@@ -215,9 +215,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'form'</span>:
-			<span class="hljs-keyword">var</span> isInput = includes(properties._attributes, <span class="hljs-string">'type'</span>);
-			<span class="hljs-keyword">return</span> isInput ? <span class="hljs-string">'input'</span> : <span class="hljs-string">'div'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">case</span> <span class="string">'form'</span>:
+			<span class="keyword">var</span> isInput = includes(properties._attributes, <span class="string">'type'</span>);
+			<span class="keyword">return</span> isInput ? <span class="string">'input'</span> : <span class="string">'div'</span>;</pre></div></div>
             
         </li>
         
@@ -229,37 +229,38 @@
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>childs of <code>head</code> are <code>meta</code>-tags, if they have a <code>content</code>-attribute. example: <code>head &gt; [content=&quot;UTF-8&quot;] + [name=viewport content=&quot;width=device-width&quot;]</code>
-=&gt; <code>&lt;head&gt;
-     &lt;meta content=&quot;UTF-8&quot;&gt;
+=&gt; </p>
+<pre><code class="lang-<head>">     &lt;meta content=&quot;UTF-8&quot;&gt;
      &lt;meta name=&quot;viewport&quot; content=&quot;width=decice-width&quot;&gt;
-   &lt;/head&gt;</code></p>
+   &lt;/head&gt;
+</code></pre>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'head'</span>:
-			<span class="hljs-keyword">var</span> isMeta = includes(properties._attributes, <span class="hljs-string">'content'</span>);
-			<span class="hljs-keyword">return</span> isMeta ? <span class="hljs-string">'meta'</span> : <span class="hljs-string">'div'</span>;
-		<span class="hljs-keyword">default</span>:
-			<span class="hljs-keyword">return</span> <span class="hljs-string">'div'</span>;
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">case</span> <span class="string">'head'</span>:
+			<span class="keyword">var</span> isMeta = includes(properties._attributes, <span class="string">'content'</span>);
+			<span class="keyword">return</span> isMeta ? <span class="string">'meta'</span> : <span class="string">'div'</span>;
+		<span class="keyword">default</span>:
+			<span class="keyword">return</span> <span class="string">'div'</span>;
 		}
 	}
 	
 	
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">interpolate</span><span class="hljs-params">(value, counter)</span> {</span>
-		<span class="hljs-keyword">var</span> result = value;
-		<span class="hljs-keyword">var</span> key = result.match(<span class="hljs-regexp">/\$:([a-z]+)/i</span>);
-		<span class="hljs-keyword">var</span> replacement = dataSource(key[<span class="hljs-number">1</span>], counter - <span class="hljs-number">1</span>);
-		<span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> replacement !== <span class="hljs-string">'undefined'</span>) { 
-			<span class="hljs-keyword">return</span> result.replace(key[<span class="hljs-number">0</span>], replacement);
-		} <span class="hljs-keyword">else</span> {
-			<span class="hljs-keyword">return</span> result.replace(key[<span class="hljs-number">0</span>], <span class="hljs-string">"[[specify value for "</span>+key[<span class="hljs-number">0</span>]+<span class="hljs-string">"]]"</span>);
+	<span class="function"><span class="keyword">function</span> <span class="title">interpolate</span><span class="params">(value, counter)</span> {</span>
+		<span class="keyword">var</span> result = value;
+		<span class="keyword">var</span> key = result.match(<span class="regexp">/\$:([a-z]+)/i</span>);
+		<span class="keyword">var</span> replacement = dataSource(key[<span class="number">1</span>], counter - <span class="number">1</span>);
+		<span class="keyword">if</span>(<span class="keyword">typeof</span> replacement !== <span class="string">'undefined'</span>) { 
+			<span class="keyword">return</span> result.replace(key[<span class="number">0</span>], replacement);
+		} <span class="keyword">else</span> {
+			<span class="keyword">return</span> result.replace(key[<span class="number">0</span>], <span class="string">"[[specify value for "</span>+key[<span class="number">0</span>]+<span class="string">"]]"</span>);
 		}
 	}
 
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkMarker</span><span class="hljs-params">(textRaw, position)</span> {</span>
-		<span class="hljs-keyword">if</span>(textRaw.charAt(position-<span class="hljs-number">1</span>) == <span class="hljs-string">"\\"</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"escaped"</span>;
-		<span class="hljs-keyword">if</span>(textRaw.charAt(position+<span class="hljs-number">1</span>) == <span class="hljs-string">":"</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"token"</span>;
-		<span class="hljs-keyword">return</span> <span class="hljs-string">"counter"</span>;
+	<span class="function"><span class="keyword">function</span> <span class="title">checkMarker</span><span class="params">(textRaw, position)</span> {</span>
+		<span class="keyword">if</span>(textRaw.charAt(position-<span class="number">1</span>) == <span class="string">"\\"</span>) <span class="keyword">return</span> <span class="string">"escaped"</span>;
+		<span class="keyword">if</span>(textRaw.charAt(position+<span class="number">1</span>) == <span class="string">":"</span>) <span class="keyword">return</span> <span class="string">"token"</span>;
+		<span class="keyword">return</span> <span class="string">"counter"</span>;
 	}</pre></div></div>
             
         </li>
@@ -276,15 +277,15 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildNodeText</span><span class="hljs-params">(textRaw, counter)</span> {</span>
-		<span class="hljs-keyword">var</span> occurrences = getIndices(textRaw),
-			searchText = <span class="hljs-string">""</span>,
-			text = textRaw.substring(<span class="hljs-number">0</span>, occurrences[<span class="hljs-number">0</span>]),
-			startPos = occurrences[<span class="hljs-number">0</span>],
-			endPos = (occurrences.length&gt;<span class="hljs-number">1</span>) ? occurrences[<span class="hljs-number">1</span>] : textRaw.length,
+            <div class="content"><div class='highlight'><pre>	<span class="function"><span class="keyword">function</span> <span class="title">buildNodeText</span><span class="params">(textRaw, counter)</span> {</span>
+		<span class="keyword">var</span> occurrences = getIndices(textRaw),
+			searchText = <span class="string">""</span>,
+			text = textRaw.substring(<span class="number">0</span>, occurrences[<span class="number">0</span>]),
+			startPos = occurrences[<span class="number">0</span>],
+			endPos = (occurrences.length&gt;<span class="number">1</span>) ? occurrences[<span class="number">1</span>] : textRaw.length,
 			mode;
 
-		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>;i&lt;occurrences.length;i++) {
+		<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;occurrences.length;i++) {
 			
 			searchText = textRaw.substring(startPos,endPos);
 			mode = checkMarker(textRaw, occurrences[i]);</pre></div></div>
@@ -302,9 +303,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(mode ==  <span class="hljs-string">'escaped'</span>) {
+            <div class="content"><div class='highlight'><pre>			<span class="keyword">if</span>(mode ==  <span class="string">'escaped'</span>) {
 				text+=searchText;
-				text=text.replace(<span class="hljs-regexp">/\\/</span>,<span class="hljs-string">""</span>);
+				text=text.replace(<span class="regexp">/\\/</span>,<span class="string">""</span>);
 			}</pre></div></div>
             
         </li>
@@ -320,7 +321,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(mode ==  <span class="hljs-string">'token'</span>) {
+            <div class="content"><div class='highlight'><pre>			<span class="keyword">if</span>(mode ==  <span class="string">'token'</span>) {
 				text+=interpolate(searchText, counter);
 			}</pre></div></div>
             
@@ -337,33 +338,33 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(mode ==  <span class="hljs-string">'counter'</span>) {
-				searchText=searchText.replace(<span class="hljs-string">"$"</span>,counter);
+            <div class="content"><div class='highlight'><pre>			<span class="keyword">if</span>(mode ==  <span class="string">'counter'</span>) {
+				searchText=searchText.replace(<span class="string">"$"</span>,counter);
 				text+=searchText;
 			}
 			
 			startPos = endPos;
-			endPos = (occurrences.length&gt;=i+<span class="hljs-number">3</span>) ? occurrences[i+<span class="hljs-number">2</span>] : textRaw.length;
+			endPos = (occurrences.length&gt;=i+<span class="number">3</span>) ? occurrences[i+<span class="number">2</span>] : textRaw.length;
 		}
 
-		<span class="hljs-keyword">return</span> text;
+		<span class="keyword">return</span> text;
 	}
 
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getIndices</span><span class="hljs-params">(value)</span> {</span>
-	    <span class="hljs-keyword">var</span> startIndex = <span class="hljs-number">0</span>;
-	    <span class="hljs-keyword">var</span> index, indices = [];
-	    <span class="hljs-keyword">while</span> ((index = value.indexOf(<span class="hljs-string">"$"</span>, startIndex)) &gt; -<span class="hljs-number">1</span>) {
+	<span class="function"><span class="keyword">function</span> <span class="title">getIndices</span><span class="params">(value)</span> {</span>
+	    <span class="keyword">var</span> startIndex = <span class="number">0</span>;
+	    <span class="keyword">var</span> index, indices = [];
+	    <span class="keyword">while</span> ((index = value.indexOf(<span class="string">"$"</span>, startIndex)) &gt; -<span class="number">1</span>) {
 	        indices.push(index);
-	        startIndex = index + <span class="hljs-number">1</span>;
+	        startIndex = index + <span class="number">1</span>;
 	    }
-	    <span class="hljs-keyword">return</span> indices;
+	    <span class="keyword">return</span> indices;
 	}
 
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildNode</span><span class="hljs-params">(properties)</span> {</span>
-		<span class="hljs-keyword">var</span> name = getName(properties);
-		<span class="hljs-keyword">var</span> node = document.createElement(name);
+	<span class="function"><span class="keyword">function</span> <span class="title">buildNode</span><span class="params">(properties)</span> {</span>
+		<span class="keyword">var</span> name = getName(properties);
+		<span class="keyword">var</span> node = document.createElement(name);
 
-		<span class="hljs-keyword">if</span> (properties._text) {</pre></div></div>
+		<span class="keyword">if</span> (properties._text) {</pre></div></div>
             
         </li>
         
@@ -378,50 +379,50 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(properties._text.indexOf(<span class="hljs-string">'$'</span>) &lt; <span class="hljs-number">0</span>) {
+            <div class="content"><div class='highlight'><pre>			<span class="keyword">if</span>(properties._text.indexOf(<span class="string">'$'</span>) &lt; <span class="number">0</span>) {
 				node.textContent = properties._text;
-			} <span class="hljs-keyword">else</span> {
+			} <span class="keyword">else</span> {
 				node.textContent = buildNodeText(properties._text, properties.counter);
 			}
 		}
 
-		each(properties.children, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-			<span class="hljs-keyword">this</span>.parent._name = name;
+		each(properties.children, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+			<span class="keyword">this</span>.parent._name = name;
 		});
 
-		each(properties._attributes, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-			<span class="hljs-keyword">this</span>.value = buildNodeText(<span class="hljs-keyword">this</span>.value, properties.counter);
-			node.setAttribute(<span class="hljs-keyword">this</span>.name, <span class="hljs-keyword">this</span>.value);
+		each(properties._attributes, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+			<span class="keyword">this</span>.value = buildNodeText(<span class="keyword">this</span>.value, properties.counter);
+			node.setAttribute(<span class="keyword">this</span>.name, <span class="keyword">this</span>.value);
 		});
 
-		<span class="hljs-keyword">return</span> node;
+		<span class="keyword">return</span> node;
 	}
 
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">traverseTree</span><span class="hljs-params">(base, context)</span>{</span>
-		<span class="hljs-keyword">var</span> node = buildNode(base);
+	<span class="function"><span class="keyword">function</span> <span class="title">traverseTree</span><span class="params">(base, context)</span>{</span>
+		<span class="keyword">var</span> node = buildNode(base);
 		context.appendChild(node);
-		each(base.children, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-			traverseTree(<span class="hljs-keyword">this</span>, node);
+		each(base.children, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+			traverseTree(<span class="keyword">this</span>, node);
 		});
 	}
 
-	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getterFor</span><span class="hljs-params">(data)</span> {</span>
-		<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key, index)</span> {</span>
-			<span class="hljs-keyword">var</span> value = data[key];
+	<span class="function"><span class="keyword">function</span> <span class="title">getterFor</span><span class="params">(data)</span> {</span>
+		<span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(key, index)</span> {</span>
+			<span class="keyword">var</span> value = data[key];
 
-			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'object'</span>) {
-				<span class="hljs-keyword">if</span> (value.length &gt; index) {
-					<span class="hljs-keyword">return</span> value[index];
-				} <span class="hljs-keyword">else</span> {
-					<span class="hljs-keyword">return</span> value[index-value.length]
+			<span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">'object'</span>) {
+				<span class="keyword">if</span> (value.length &gt; index) {
+					<span class="keyword">return</span> value[index];
+				} <span class="keyword">else</span> {
+					<span class="keyword">return</span> value[index-value.length]
 				}
 			}
 
-			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'function'</span>) {
-				<span class="hljs-keyword">return</span> value.call(<span class="hljs-keyword">this</span>, index);
+			<span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">'function'</span>) {
+				<span class="keyword">return</span> value.call(<span class="keyword">this</span>, index);
 			}
 
-			<span class="hljs-keyword">return</span> value;
+			<span class="keyword">return</span> value;
 		};
 	}</pre></div></div>
             
@@ -439,7 +440,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Zen</span><span class="hljs-params">(expression, inputDataSource)</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	<span class="function"><span class="keyword">function</span> <span class="title">Zen</span><span class="params">(expression, inputDataSource)</span> {</span></pre></div></div>
             
         </li>
         
@@ -466,21 +467,21 @@ Zen(&#39;ul &gt; {$:i}*3&#39;, function (key, index) {
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span>(inputDataSource) == <span class="hljs-string">'undefined'</span>) {
-			dataSource = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> }
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">if</span>(<span class="keyword">typeof</span>(inputDataSource) == <span class="string">'undefined'</span>) {
+			dataSource = <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span> <span class="keyword">return</span> <span class="literal">false</span> }
 		}
-		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span>(inputDataSource) !== <span class="hljs-string">'function'</span>) {
+		<span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span>(inputDataSource) !== <span class="string">'function'</span>) {
 			dataSource = getterFor(inputDataSource);
-		} <span class="hljs-keyword">else</span> {
+		} <span class="keyword">else</span> {
 			dataSource = inputDataSource;
 		}
 
-		<span class="hljs-keyword">var</span> fragment = document.createDocumentFragment();
-		<span class="hljs-keyword">var</span> nodes = parser.parse(expression).children;
-		each(nodes, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
-			traverseTree(<span class="hljs-keyword">this</span>, fragment);
+		<span class="keyword">var</span> fragment = document.createDocumentFragment();
+		<span class="keyword">var</span> nodes = parser.parse(expression).children;
+		each(nodes, <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+			traverseTree(<span class="keyword">this</span>, fragment);
 		});
-		<span class="hljs-keyword">return</span> fragment;
+		<span class="keyword">return</span> fragment;
 	};</pre></div></div>
             
         </li>
@@ -497,7 +498,7 @@ Zen(&#39;ul &gt; {$:i}*3&#39;, function (key, index) {
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span> ($) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	<span class="keyword">if</span> ($) {</pre></div></div>
             
         </li>
         
@@ -512,9 +513,9 @@ Zen(&#39;ul &gt; {$:i}*3&#39;, function (key, index) {
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		$.zen = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(expression, dataSource)</span> {</span>
-			<span class="hljs-keyword">var</span> fragment = Zen(expression, dataSource);
-			<span class="hljs-keyword">return</span> $(fragment);
+            <div class="content"><div class='highlight'><pre>		$.zen = <span class="function"><span class="keyword">function</span><span class="params">(expression, dataSource)</span> {</span>
+			<span class="keyword">var</span> fragment = Zen(expression, dataSource);
+			<span class="keyword">return</span> $(fragment);
 		}</pre></div></div>
             
         </li>
@@ -530,17 +531,17 @@ Zen(&#39;ul &gt; {$:i}*3&#39;, function (key, index) {
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		$.fn.zen = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(expression, dataSource)</span> {</span>
-			<span class="hljs-keyword">var</span> fragment = Zen(expression, dataSource);
-			<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-				<span class="hljs-keyword">var</span> clone = fragment.cloneNode(<span class="hljs-literal">true</span>);
-				<span class="hljs-keyword">this</span>.innerHTML = <span class="hljs-string">''</span>;
-				<span class="hljs-keyword">this</span>.appendChild(clone);
+            <div class="content"><div class='highlight'><pre>		$.fn.zen = <span class="function"><span class="keyword">function</span><span class="params">(expression, dataSource)</span> {</span>
+			<span class="keyword">var</span> fragment = Zen(expression, dataSource);
+			<span class="keyword">return</span> <span class="keyword">this</span>.each(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+				<span class="keyword">var</span> clone = fragment.cloneNode(<span class="literal">true</span>);
+				<span class="keyword">this</span>.innerHTML = <span class="string">''</span>;
+				<span class="keyword">this</span>.appendChild(clone);
 			});
 		};
 	}
 
-	<span class="hljs-keyword">return</span> Zen;
+	<span class="keyword">return</span> Zen;
 
 })(window.jQuery);</pre></div></div>
             
