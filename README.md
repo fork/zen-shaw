@@ -10,4 +10,5 @@ Use Emmet-style HTML shortcode strings to buld documentFragments or replace DOM-
 4. Issue `grunt` in project directory to build an uglified library.
 
 ### Issues
-Visit [our Atlassian Jira](https://jira.fork.de/browse/ZEN) instance to post issues.
+
+Soon.
