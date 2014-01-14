@@ -40,25 +40,85 @@ var Zen = (function($) {
 
 		switch (properties.parent._name) {
 		// example: `ul > {List item #$}*7`
+    // => <ul> 
+    //      <li>List item #1</li>
+    //      <li>List item #2</li>
+    //      <li>List item #3</li>
+    //      <li>List item #4</li>
+    //      <li>List item #5</li>
+    //      <li>List item #6</li>
+    //      <li>List item #7</li>
+    //    </ul>
 		case 'ol':
 		case 'ul':
 			return 'li';
-		// example: `table[border=1] > .row*5 > {Test}*3`
+		// example: `table[border=1] > .row*5 > {Test}*3` 
+    // => 
+    //    <table border="1">
+    //      <tr>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //      </tr>
+    //      <tr>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //      </tr>
+    //      <tr>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //      </tr>
+    //      <tr>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //      </tr>
+    //      <tr>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //        <td>Test</td>
+    //      </tr>
+    //    </table>
 		case 'table':
 			return 'tr';
 		case 'tr':
 			return 'td';
-		// example: `select > {hallo?}*5`
+		// example: `select > {Option#$}*5`
+    // => <select>
+    //      <option>Option#1</option>
+    //      <option>Option#2</option>
+    //      <option>Option#3</option>
+    //      <option>Option#4</option>
+    //      <option>Option#5</option>
+    //    </select>
 		case 'select':
 			return 'option';
 		// example: `nav > #test-ul > {Test1} + {Test2}`
+    // => <nav>
+    //      <ul class="test-ul">
+    //        <li>Test1</li>
+    //        <li>Test2</li>
+    //      </ul>
+    //    </nav>
 		case 'nav':
 			return 'ul';
-		// childs of `form` are `input`-tags, if they have a `type`-attribute. example: `form > [type=text]#username + [type=password]#password`
+		// childs of `form` are `input`-tags, if they have a `type`-attribute. example: `form > #username[type=text] + #password[type=password]`
+    // => <form>
+    //      <input type ="text>username">username<br>
+    //      <input type="password">password
+    //    </form> 
 		case 'form':
 			var isInput = includes(properties._attributes, 'type');
 			return isInput ? 'input' : 'div';
 		// childs of `head` are `meta`-tags, if they have a `content`-attribute. example: `head > [content="UTF-8"] + [name=viewport content="width=device-width"]`
+    // => 
+    //    ```<head>
+    //      <meta content="UTF-8">
+    //      <meta name="viewport" content="width=decice-width">
+    //    </head>``` 
+
 		case 'head':
 			var isMeta = includes(properties._attributes, 'content');
 			return isMeta ? 'meta' : 'div';
@@ -100,7 +160,7 @@ var Zen = (function($) {
 			searchText = textRaw.substring(startPos,endPos);
 			mode = checkMarker(textRaw, occurrences[i]);
 			
-			// Escaping Emmet keys like `$`. Example: `span{You have to save \\$1000}`
+			// Escaping Emmet keys like `$`. Example: `span{You have to save \\$1000}`=> <span>You have to save $1000</span>
 			if(mode ==  'escaped') {
 				text+=searchText;
 				text=text.replace(/\\/,"");
