@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Zen.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Zen.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p><strong>Zen-Shaw</strong> is an enhanced <a href="http://emmet.io/">Emmet</a>-powered <code>documentFragment</code> builder.</p>
+<h3 id="build">Build</h3>
+<ol>
+<li>Install node on your machine.</li>
+<li>Install the <em>Grunt-CLI</em> as Root: <code>sudo npm install -g grunt-cli</code></li>
+<li>Issue <code>npm install</code> in project directory to get Grunt and it&#39;s dependencies</li>
+<li>Issue <code>grunt</code> in project directory to build an uglified library.</li>
+</ol>
+<h3 id="issues">Issues</h3>
+<p>Visit <a href="https://jira.fork.de/browse/ZEN">our Atlassian Jira</a> instance to post issues.</p>
+<h3 id="license">License</h3>
+<p>Copyright (C) 2013 Fork Unstable Media GmbH</p>
+<p>Zen-Shaw is licensed within the terms of the MIT license.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> Zen = (<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">($)</span> {</span>
+<span class="hljs-pi">	'use strict'</span>;
+
+	<span class="hljs-keyword">var</span> dataSource,
+		parser = emmet.require(<span class="hljs-string">'abbreviationParser'</span>);;
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">each</span><span class="hljs-params">(array, fn)</span> {</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = array.length; i &lt; len; i++) {
+			<span class="hljs-keyword">if</span> (fn.call(array[i], i) === <span class="hljs-literal">false</span>) <span class="hljs-keyword">return</span>;
+		}
+	}
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">includes</span><span class="hljs-params">(haystack, needle)</span> {</span>
+		<span class="hljs-keyword">var</span> isIncluded = <span class="hljs-literal">false</span>;
+		each(haystack, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">return</span> !(isIncluded = <span class="hljs-keyword">this</span>.name === needle);
+		});
+		<span class="hljs-keyword">return</span> isIncluded;
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="our-extra-portion-of-syntax">Our extra portion of syntax</h2>
+<p>This function does the magic of implicit tag names</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getName</span><span class="hljs-params">(properties)</span> {</span>
+		<span class="hljs-keyword">if</span> (properties._name) <span class="hljs-keyword">return</span> properties._name;
+
+		<span class="hljs-keyword">switch</span> (properties.parent._name) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>example: <code>ul &gt; {List item #$}*7</code>
+=&gt; <ul> 
+     <li>List item #1</li>
+     <li>List item #2</li>
+     <li>List item #3</li>
+     <li>List item #4</li>
+     <li>List item #5</li>
+     <li>List item #6</li>
+     <li>List item #7</li>
+   </ul></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'ol'</span>:
+		<span class="hljs-keyword">case</span> <span class="hljs-string">'ul'</span>:
+			<span class="hljs-keyword">return</span> <span class="hljs-string">'li'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>example: <code>table[border=1] &gt; .row*5 &gt; {Test}*3</code> 
+=&gt; 
+   <table border="1">
+     <tr>
+       <td>Test</td>
+       <td>Test</td>
+       <td>Test</td>
+     </tr>
+     <tr>
+       <td>Test</td>
+       <td>Test</td>
+       <td>Test</td>
+     </tr>
+     <tr>
+       <td>Test</td>
+       <td>Test</td>
+       <td>Test</td>
+     </tr>
+     <tr>
+       <td>Test</td>
+       <td>Test</td>
+       <td>Test</td>
+     </tr>
+     <tr>
+       <td>Test</td>
+       <td>Test</td>
+       <td>Test</td>
+     </tr>
+   </table></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'table'</span>:
+			<span class="hljs-keyword">return</span> <span class="hljs-string">'tr'</span>;
+		<span class="hljs-keyword">case</span> <span class="hljs-string">'tr'</span>:
+			<span class="hljs-keyword">return</span> <span class="hljs-string">'td'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>example: <code>select &gt; {Option#$}*5</code>
+=&gt; <select>
+     <option>Option#1</option>
+     <option>Option#2</option>
+     <option>Option#3</option>
+     <option>Option#4</option>
+     <option>Option#5</option>
+   </select></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'select'</span>:
+			<span class="hljs-keyword">return</span> <span class="hljs-string">'option'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>example: <code>nav &gt; #test-ul &gt; {Test1} + {Test2}</code>
+=&gt; <nav>
+     <ul class="test-ul">
+       <li>Test1</li>
+       <li>Test2</li>
+     </ul>
+   </nav></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'nav'</span>:
+			<span class="hljs-keyword">return</span> <span class="hljs-string">'ul'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>childs of <code>form</code> are <code>input</code>-tags, if they have a <code>type</code>-attribute. example: <code>form &gt; #username[type=text] + #password[type=password]</code>
+=&gt; <form>
+     <input type ="text>username">username<br>
+     <input type="password">password
+   </form> </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'form'</span>:
+			<span class="hljs-keyword">var</span> isInput = includes(properties._attributes, <span class="hljs-string">'type'</span>);
+			<span class="hljs-keyword">return</span> isInput ? <span class="hljs-string">'input'</span> : <span class="hljs-string">'div'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>childs of <code>head</code> are <code>meta</code>-tags, if they have a <code>content</code>-attribute. example: <code>head &gt; [content=&quot;UTF-8&quot;] + [name=viewport content=&quot;width=device-width&quot;]</code>
+=&gt; <textarea cols="52" rows="5">
+   <head>
+     <meta content="UTF-8">
+     <meta name="viewport" content="width=decice-width">
+   </head> 
+   </textarea></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">case</span> <span class="hljs-string">'head'</span>:
+			<span class="hljs-keyword">var</span> isMeta = includes(properties._attributes, <span class="hljs-string">'content'</span>);
+			<span class="hljs-keyword">return</span> isMeta ? <span class="hljs-string">'meta'</span> : <span class="hljs-string">'div'</span>;
+		<span class="hljs-keyword">default</span>:
+			<span class="hljs-keyword">return</span> <span class="hljs-string">'div'</span>;
+		}
+	}
+	
+	
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">interpolate</span><span class="hljs-params">(value, counter)</span> {</span>
+		<span class="hljs-keyword">var</span> result = value;
+		<span class="hljs-keyword">var</span> key = result.match(<span class="hljs-regexp">/\$:([a-z]+)/i</span>);
+		<span class="hljs-keyword">var</span> replacement = dataSource(key[<span class="hljs-number">1</span>], counter - <span class="hljs-number">1</span>);
+		<span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span> replacement !== <span class="hljs-string">'undefined'</span>) { 
+			<span class="hljs-keyword">return</span> result.replace(key[<span class="hljs-number">0</span>], replacement);
+		} <span class="hljs-keyword">else</span> {
+			<span class="hljs-keyword">return</span> result.replace(key[<span class="hljs-number">0</span>], <span class="hljs-string">"[[specify value for "</span>+key[<span class="hljs-number">0</span>]+<span class="hljs-string">"]]"</span>);
+		}
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">checkMarker</span><span class="hljs-params">(textRaw, position)</span> {</span>
+		<span class="hljs-keyword">if</span>(textRaw.charAt(position-<span class="hljs-number">1</span>) == <span class="hljs-string">"\\"</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"escaped"</span>;
+		<span class="hljs-keyword">if</span>(textRaw.charAt(position+<span class="hljs-number">1</span>) == <span class="hljs-string">":"</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"token"</span>;
+		<span class="hljs-keyword">return</span> <span class="hljs-string">"counter"</span>;
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h2 id="additional-content-functions">Additional content functions</h2>
+<p>By default, Emmet only supports plain text within curly braces</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildNodeText</span><span class="hljs-params">(textRaw, counter)</span> {</span>
+		<span class="hljs-keyword">var</span> occurrences = getIndices(textRaw),
+			searchText = <span class="hljs-string">""</span>,
+			text = textRaw.substring(<span class="hljs-number">0</span>, occurrences[<span class="hljs-number">0</span>]),
+			startPos = occurrences[<span class="hljs-number">0</span>],
+			endPos = (occurrences.length&gt;<span class="hljs-number">1</span>) ? occurrences[<span class="hljs-number">1</span>] : textRaw.length,
+			mode;
+
+		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i=<span class="hljs-number">0</span>;i&lt;occurrences.length;i++) {
+			
+			searchText = textRaw.substring(startPos,endPos);
+			mode = checkMarker(textRaw, occurrences[i]);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Escaping Emmet keys like <code>$</code>. Example: <code>span{You have to save \\$1000}</code>=&gt; <span>You have to save $1000</span></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(mode ==  <span class="hljs-string">'escaped'</span>) {
+				text+=searchText;
+				text=text.replace(<span class="hljs-regexp">/\\/</span>,<span class="hljs-string">""</span>);
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>This parses the inputDataSource as explained at the Main-Function lower on this page</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(mode ==  <span class="hljs-string">'token'</span>) {
+				text+=interpolate(searchText, counter);
+			}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p><a href="http://docs.emmet.io/abbreviations/syntax/#item-numbering-">The good, old counter</a> is now also working to set the elements content</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(mode ==  <span class="hljs-string">'counter'</span>) {
+				searchText=searchText.replace(<span class="hljs-string">"$"</span>,counter);
+				text+=searchText;
+			}
+			
+			startPos = endPos;
+			endPos = (occurrences.length&gt;=i+<span class="hljs-number">3</span>) ? occurrences[i+<span class="hljs-number">2</span>] : textRaw.length;
+		}
+
+		<span class="hljs-keyword">return</span> text;
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getIndices</span><span class="hljs-params">(value)</span> {</span>
+	    <span class="hljs-keyword">var</span> startIndex = <span class="hljs-number">0</span>;
+	    <span class="hljs-keyword">var</span> index, indices = [];
+	    <span class="hljs-keyword">while</span> ((index = value.indexOf(<span class="hljs-string">"$"</span>, startIndex)) &gt; -<span class="hljs-number">1</span>) {
+	        indices.push(index);
+	        startIndex = index + <span class="hljs-number">1</span>;
+	    }
+	    <span class="hljs-keyword">return</span> indices;
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildNode</span><span class="hljs-params">(properties)</span> {</span>
+		<span class="hljs-keyword">var</span> name = getName(properties);
+		<span class="hljs-keyword">var</span> node = document.createElement(name);
+
+		<span class="hljs-keyword">if</span> (properties._text) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p><code>textContent</code> is not supported by IE8. <a href="https://forrst.com/posts/textContent_in_IE8-eNC">Use a shim</a>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			<span class="hljs-keyword">if</span>(properties._text.indexOf(<span class="hljs-string">'$'</span>) &lt; <span class="hljs-number">0</span>) {
+				node.textContent = properties._text;
+			} <span class="hljs-keyword">else</span> {
+				node.textContent = buildNodeText(properties._text, properties.counter);
+			}
+		}
+
+		each(properties.children, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">this</span>.parent._name = name;
+		});
+
+		each(properties._attributes, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+			<span class="hljs-keyword">this</span>.value = buildNodeText(<span class="hljs-keyword">this</span>.value, properties.counter);
+			node.setAttribute(<span class="hljs-keyword">this</span>.name, <span class="hljs-keyword">this</span>.value);
+		});
+
+		<span class="hljs-keyword">return</span> node;
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">traverseTree</span><span class="hljs-params">(base, context)</span>{</span>
+		<span class="hljs-keyword">var</span> node = buildNode(base);
+		context.appendChild(node);
+		each(base.children, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+			traverseTree(<span class="hljs-keyword">this</span>, node);
+		});
+	}
+
+	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getterFor</span><span class="hljs-params">(data)</span> {</span>
+		<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(key, index)</span> {</span>
+			<span class="hljs-keyword">var</span> value = data[key];
+
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'object'</span>) {
+				<span class="hljs-keyword">if</span> (value.length &gt; index) {
+					<span class="hljs-keyword">return</span> value[index];
+				} <span class="hljs-keyword">else</span> {
+					<span class="hljs-keyword">return</span> value[index-value.length]
+				}
+			}
+
+			<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">'function'</span>) {
+				<span class="hljs-keyword">return</span> value.call(<span class="hljs-keyword">this</span>, index);
+			}
+
+			<span class="hljs-keyword">return</span> value;
+		};
+	}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2 id="the-main-function">The main function</h2>
+<p>returns <code>documentFragment</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Zen</span><span class="hljs-params">(expression, inputDataSource)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>The special thing about <strong>Zen-Shaw</strong>: Submitting data that you can use to build your DOM.
+For example:</p>
+<pre><code class="lang-javascript">Zen(&#39;ul &gt; #test-$:b{$:i}*3&#39;, {
+    &#39;b&#39;: [1, 2, 3],
+    &#39;i&#39;: [&#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39;]
+});
+</code></pre>
+<p>It&#39;s also possible to submit a function as inputDataSource:</p>
+<pre><code class="lang-javascript">var classNames = [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot;];
+Zen(&#39;ul &gt; {$:i}*3&#39;, function (key, index) {
+    return (key === &#39;i&#39;) ? classNames[index] : &#39;xxx&#39;;
+});
+</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-keyword">if</span>(<span class="hljs-keyword">typeof</span>(inputDataSource) == <span class="hljs-string">'undefined'</span>) {
+			dataSource = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> }
+		}
+		<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span>(inputDataSource) !== <span class="hljs-string">'function'</span>) {
+			dataSource = getterFor(inputDataSource);
+		} <span class="hljs-keyword">else</span> {
+			dataSource = inputDataSource;
+		}
+
+		<span class="hljs-keyword">var</span> fragment = document.createDocumentFragment();
+		<span class="hljs-keyword">var</span> nodes = parser.parse(expression).children;
+		each(nodes, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+			traverseTree(<span class="hljs-keyword">this</span>, fragment);
+		});
+		<span class="hljs-keyword">return</span> fragment;
+	};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h2 id="jquery-integration">jQuery integration</h2>
+<p>The functions take the same arguments as <code>Zen()</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-keyword">if</span> ($) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Okay, <code>Zen()</code> is now also reachable by <code>$.zen()</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$.zen = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(expression, dataSource)</span> {</span>
+			<span class="hljs-keyword">var</span> fragment = Zen(expression, dataSource);
+			<span class="hljs-keyword">return</span> $(fragment);
+		}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Set the inner HTML of the given object. Example: <code>$(&#39;body&#39;).zen(&#39;table[border=1]&gt;.row*5&gt;{Test}*3&#39;);</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		$.fn.zen = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(expression, dataSource)</span> {</span>
+			<span class="hljs-keyword">var</span> fragment = Zen(expression, dataSource);
+			<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+				<span class="hljs-keyword">var</span> clone = fragment.cloneNode(<span class="hljs-literal">true</span>);
+				<span class="hljs-keyword">this</span>.innerHTML = <span class="hljs-string">''</span>;
+				<span class="hljs-keyword">this</span>.appendChild(clone);
+			});
+		};
+	}
+
+	<span class="hljs-keyword">return</span> Zen;
+
+})(window.jQuery);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
